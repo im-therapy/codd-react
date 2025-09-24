@@ -1,0 +1,13 @@
+@import './base.css' layer base;
+@import './colour.css' layer colour;
+@import './typography.css' layer typography;
+
+@layer typography, colour, base;
+/* 
+    Слой colour - для цветов, окрашивания чего-либо;
+    Слой typography - для всего, что связано с типографикой на сайте;
+    Слой base - для базовых компонентов и их вариаций (например button - две вариации: default и black, см. дизайн/components), НЕ для обычных стилей блоков, страниц и т.д.;
+    Этот файлик (global.css) - для стилизации всех остальных блоков и секций.
+
+    Желательно использовать CSS Nesting. Отступы, ширины, высота и любые другие величины указываем в em/rem, как удобно. 
+*/
