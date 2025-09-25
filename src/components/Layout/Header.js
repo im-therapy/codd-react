@@ -4,6 +4,7 @@ import { ReactComponent as NewsIcon } from '../../assets/icons/news.svg';
 import { ReactComponent as AnalIcon } from '../../assets/icons/Anal.svg';
 import { ReactComponent as MapIcon } from '../../assets/icons/map.svg';
 import { ReactComponent as AuthIcon } from '../../assets/icons/auth.svg';
+import styles from '../../styles/modules/Header.module.css';
 
 // Компонент шапки сайта с навигацией
 export default function Header() {
@@ -11,98 +12,47 @@ export default function Header() {
     const location = useLocation();
 
     return (
-        <header style={{
-            position: 'fixed',
-            top: '16px',
-            left: '16px',
-            right: '16px',
-            height: '70px',
-            zIndex: 2000,
-            backgroundColor: 'rgba(12, 12, 12, 0.8)',
-            backdropFilter: 'blur(10px)',
-            WebkitBackdropFilter: 'blur(10px)',
-            border: '2px solid #1C1D1F',
-            borderRadius: '12px',
-            padding: '0 24px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
-        }}>
-            <div style={{ color: 'white', fontSize: '18px', fontWeight: 'bold' }}>
-                <span style={{ color: '#62A744' }}>ЦОДД</span> Смоленской области
+        <header className={styles.header}>
+            <div className={styles.logo}>
+                <span className={styles.logoAccent}>ЦОДД</span> Смоленской области
             </div>
 
-            <div style={{ display: 'flex', gap: '32px', alignItems: 'center' }}>
+            <div className={styles.nav}>
                 <Link
                     to="/"
-                    style={{
-                        textDecoration: 'none',
-                        color: location.pathname === '/' ? 'white' : '#676C75',
-                        fontSize: '16px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px'
-                    }}
+                    className={`${styles.navLink} ${location.pathname === '/' ? styles.navLinkActive : styles.navLinkInactive}`}
                 >
-                    <HomeIcon style={{ width: '20px', height: '20px', color: location.pathname === '/' ? 'white' : '#676C75' }} />
+                    <HomeIcon className={`${styles.icon} ${location.pathname === '/' ? styles.iconActive : styles.iconInactive}`} />
                     Главная
                 </Link>
                 <Link
                     to="/articles"
-                    style={{
-                        textDecoration: 'none',
-                        color: location.pathname === '/articles' ? 'white' : '#676C75',
-                        fontSize: '16px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px'
-                    }}
+                    className={`${styles.navLink} ${location.pathname === '/articles' ? styles.navLinkActive : styles.navLinkInactive}`}
                 >
-                    <NewsIcon style={{ width: '20px', height: '20px', color: location.pathname === '/articles' ? 'white' : '#676C75' }} />
+                    <NewsIcon className={`${styles.icon} ${location.pathname === '/articles' ? styles.iconActive : styles.iconInactive}`} />
                     Статьи
                 </Link>
                 <Link
                     to="/maps"
-                    style={{
-                        textDecoration: 'none',
-                        color: location.pathname === '/maps' ? 'white' : '#676C75',
-                        fontSize: '16px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px'
-                    }}
+                    className={`${styles.navLink} ${location.pathname === '/maps' ? styles.navLinkActive : styles.navLinkInactive}`}
                 >
-                    <MapIcon style={{ width: '20px', height: '20px', color: location.pathname === '/maps' ? 'white' : '#676C75' }} />
+                    <MapIcon className={`${styles.icon} ${location.pathname === '/maps' ? styles.iconActive : styles.iconInactive}`} />
                     Карты
                 </Link>
                 <Link
                     to="/analytics"
-                    style={{
-                        textDecoration: 'none',
-                        color: location.pathname === '/analytics' ? 'white' : '#676C75',
-                        fontSize: '16px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px'
-                    }}
+                    className={`${styles.navLink} ${location.pathname === '/analytics' ? styles.navLinkActive : styles.navLinkInactive}`}
                 >
-                    <AnalIcon style={{ width: '20px', height: '20px', color: location.pathname === '/analytics' ? 'white' : '#676C75' }} />
+                    <AnalIcon className={`${styles.icon} ${location.pathname === '/analytics' ? styles.iconActive : styles.iconInactive}`} />
                     Аналитика
                 </Link>
             </div>
 
             <Link
                 to="/auth"
-                style={{
-                    textDecoration: 'none',
-                    color: location.pathname === '/auth' ? 'white' : '#676C75',
-                    fontSize: '16px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px'
-                }}
+                className={`${styles.authLink} ${location.pathname === '/auth' ? styles.navLinkActive : styles.navLinkInactive}`}
             >
-                <AuthIcon style={{ width: '20px', height: '20px', color: location.pathname === '/auth' ? 'white' : '#676C75' }} />
+                <AuthIcon className={`${styles.icon} ${location.pathname === '/auth' ? styles.iconActive : styles.iconInactive}`} />
                 Авторизация
             </Link>
         </header>

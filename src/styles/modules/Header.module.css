@@ -1,0 +1,71 @@
+.header {
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    right: 16px;
+    height: 70px;
+    z-index: 2000;
+    background-color: rgba(12, 12, 12, 0.5);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 2px solid #1C1D1F;
+    border-radius: 12px;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.logoAccent {
+    color: #62A744;
+}
+
+.nav {
+    display: flex;
+    gap: 32px;
+    align-items: center;
+}
+
+.navLink {
+    text-decoration: none;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.navLinkActive {
+    color: white;
+}
+
+.navLinkInactive {
+    color: #676C75;
+}
+
+.authLink {
+    text-decoration: none;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'AG Link', sans-serif;
+}
+
+.icon {
+    width: 20px;
+    height: 20px;
+}
+
+.iconActive {
+    color: white;
+}
+
+.iconInactive {
+    color: #676C75;
+}
