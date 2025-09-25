@@ -1,5 +1,5 @@
-// Главная страница
-export default function General() {
+// Страница регистрации/авторизации
+export default function Auth() {
     return (
         // Контейнер на весь экран с темным фоном
         <div style={{
@@ -15,7 +15,7 @@ export default function General() {
                 fontSize: '48px',
                 fontWeight: 'bold'
             }}>
-                ГЛАВНАЯ
+                РЕГИСТРАЦИЯ
             </h1>
         </div>
     )

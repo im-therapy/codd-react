@@ -1,5 +1,5 @@
-// Главная страница
-export default function General() {
+// Страница со статьями
+export default function Articles() {
     return (
         // Контейнер на весь экран с темным фоном
         <div style={{
@@ -15,7 +15,7 @@ export default function General() {
                 fontSize: '48px',
                 fontWeight: 'bold'
             }}>
-                ГЛАВНАЯ
+                СТАТЬИ
             </h1>
         </div>
     )
