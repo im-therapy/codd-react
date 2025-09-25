@@ -11,16 +11,16 @@ const buttonStyle = {
     position: 'fixed',
     bottom: 16,
     zIndex: 1000,
-    backgroundColor: '#0C0C0C',
-    backdropFilter: 'blur(8px)',
+    backgroundColor: 'rgba(12, 12, 12, 0.8)',
+    backdropFilter: 'blur(10px)',
+    WebkitBackdropFilter: 'blur(10px)',
     border: '2px solid #1C1D1F',
     borderRadius: 16,
     height: 54,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 6,
-    cursor: 'pointer'
+    gap: 6
 };
 
 export default function Maps() {
@@ -30,10 +30,9 @@ export default function Maps() {
         zoom: 16
     });
     const [accidentsCount] = useState(12);
-
     useEffect(() => {
         if (!navigator.geolocation) return;
-        
+
         navigator.geolocation.getCurrentPosition(
             (pos) => {
                 const { latitude: lat, longitude: lng } = pos.coords;
@@ -68,17 +67,18 @@ export default function Maps() {
                 maxBounds={REGION_BOUNDS}
                 attributionControl={false}
             />
-            
+
             <div style={{ ...buttonStyle, left: 16, width: 138 }}>
                 <FalseIcon style={{ width: 20, height: 20, fill: 'white' }} />
                 <span style={{ color: '#C21F1F', fontWeight: 'bold' }}>{accidentsCount}</span>
                 <span style={{ color: 'white' }}> аварий</span>
             </div>
-            
-            <div style={{ ...buttonStyle, left: 170, width: 145 }}>
+
+            <div style={{ ...buttonStyle, left: 170, width: 145, cursor: 'pointer' }}>
                 <SettingsIcon style={{ width: 20, height: 20, color: '#676C75' }} />
                 <span style={{ color: '#676C75' }}>Настройки</span>
             </div>
+
         </div>
     );
 }

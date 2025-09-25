@@ -3,7 +3,7 @@
 @import './typography.css' layer typography;
 
 @layer typography, colour, base;
-/* 
+/*
     Слой colour - для цветов, окрашивания чего-либо;
     Слой typography - для всего, что связано с типографикой на сайте;
     Слой base - для базовых компонентов и их вариаций (например button - две вариации: default и black, см. дизайн/components), НЕ для обычных стилей блоков, страниц и т.д.;
