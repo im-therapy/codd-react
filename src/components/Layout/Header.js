@@ -13,11 +13,11 @@ export default function Header() {
 
     return (
         <header className={styles.header}>
-            <div className={styles.logo}>
+            <Link to="/" className={styles.logo}>
                 <span className={styles.logoAccent}>ЦОДД</span> Смоленской области
-            </div>
+            </Link>
 
-            <div className={styles.nav}>
+            <nav className={styles.nav}>
                 <Link
                     to="/"
                     className={`${styles.navLink} ${location.pathname === '/' ? styles.navLinkActive : styles.navLinkInactive}`}
@@ -46,7 +46,7 @@ export default function Header() {
                     <AnalIcon className={`${styles.icon} ${location.pathname === '/analytics' ? styles.iconActive : styles.iconInactive}`} />
                     Аналитика
                 </Link>
-            </div>
+            </nav>
 
             <Link
                 to="/auth"

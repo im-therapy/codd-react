@@ -4,6 +4,7 @@ import { ReactComponent as TrafficActiveIcon } from '../assets/icons/Traffic Act
 import { ReactComponent as AvariaActiveIcon } from '../assets/icons/Avaria Active.svg';
 import { ReactComponent as FalseIcon } from '../assets/icons/false.svg';
 import { ReactComponent as SettingsIcon } from '../assets/icons/setts.svg';
+import SettingsPanel  from '../components/SettingsPanel'
 import styles from '../styles/modules/Maps.module.css';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
@@ -14,7 +15,8 @@ export default function Maps() {
         zoom: 12
     });
     const [markers, setMarkers] = useState([]);
-    const [accidentsCount] = useState(12);
+    const [accidentsCount] = useState(12); //подгрузка с сервера
+    const [isSettingsVisible, setIsSettingsVisible] = useState(false);
 
     useEffect(() => {
         // Запрос к серверу за данными
@@ -37,7 +39,7 @@ export default function Maps() {
     };
 
     return (
-        <div className={styles.container}>
+        <section className={styles.container}>
             <Map
                 {...viewState}
                 onMove={evt => setViewState(evt.viewState)}
@@ -71,13 +73,13 @@ export default function Maps() {
                     аварий
                 </span>
             </div>
-
-            <div className={`${styles.card} ${styles.settingsCard}`}>
+            <SettingsPanel isOpen={isSettingsVisible}/>
+            <button onClick={() => setIsSettingsVisible(true)} className={`${styles.card} ${styles.settingsCard}`}>
                 <SettingsIcon className={`${styles.icon} ${styles.iconGray}`} />
                 <span className={styles.textGray}>
                     Настройки
                 </span>
-            </div>
-        </div>
+            </button>
+        </section>
     );
 }

@@ -8,6 +8,8 @@
     text-box: trim-both cap alphabetic;
     font-family: 'AG Link', sans-serif;
     font-display: swap;
+    text-decoration: none;
+    list-style: none;
 }
 
 body {
