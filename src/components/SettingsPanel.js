@@ -1,19 +1,28 @@
-import styles from '../styles/modules/SettingsPanel.module.css'
+import '../styles/colour.css';
+import styles from '../styles/modules/SettingsPanel.module.css';
 import {ReactComponent as TrafficIcon} from '../assets/icons/traffic.svg';
 import {ReactComponent as ClockIcon} from '../assets/icons/clock.svg';
 import {ReactComponent as CalendarIcon} from '../assets/icons/calendar.svg';
 import {ReactComponent as CheckIcon} from '../assets/icons/check.svg';
-export default function SettingsPanel ({ isOpen }) {
+export default function SettingsPanel ({ isOpen, onClose }) {
+    const handleBackdropClick = (e) => {
+        if (e.target === e.currentTarget) {
+            onClose?.();
+        }
+    };
+
     return (
-            <div>
+            <div onClick={handleBackdropClick} style={{position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 9998, display: isOpen ? 'block' : 'none'}}>
                 <aside className={styles.container} style={{transform: isOpen ? "translateX(0)" : "translateX(100%)"}}>
                     <header className={styles.settingsHeader}>
-                        <TrafficIcon className={styles.trafficIcon}/>
+                        <div className={styles.trafficIconContainer}>
+                            <TrafficIcon className={styles.trafficIcon}/>
+                        </div>
                         <h3 className={styles.titleText}>Настройки</h3>
                     </header>
                     <main className={styles.settingsMain}>
-                        <section className={styles.durationInfo}>
-                            <h4 className={styles.durationInfoTitle}>Тип объектов</h4>
+                        <section className={styles.section}>
+                            <h4 className={styles.sectionTitle}>Тип объектов</h4>
                             <div className={styles.durationInfoItems}>
                                 <div className={styles.objectsTypeItems}>
                                     <div className={styles.objectType}>
@@ -40,8 +49,8 @@ export default function SettingsPanel ({ isOpen }) {
                                 </div>
                             </div>
                         </section>
-                        <section className={styles.durationInfo}>
-                            <h4 className={styles.durationInfoTitle}>Временной промежуток</h4>
+                        <section className={styles.section}>
+                            <h4 className={styles.sectionTitle}>Временной промежуток</h4>
                             <div className={styles.durationInfoItems}>
                                 <div className={styles.durationInfoPeriodInputs}>
                                     <CalendarIcon className={styles.durationInfoIcon} />
@@ -55,7 +64,7 @@ export default function SettingsPanel ({ isOpen }) {
                                 </div>
                             </div>
                         </section>
-                        <button className={styles.AcceptButton}>
+                        <button className={styles.acceptButton}>
                             <CheckIcon />
                             Применить
                         </button>

@@ -58,6 +58,10 @@
     color: #676C75;
 }
 
+.iconActive {
+    color: white;
+}
+
 .accidentCount {
     color: #C21F1F;
     font-weight: bold;
@@ -69,4 +73,8 @@
 
 .textGray {
     color: #676C75;
+}
+
+.textActive {
+    color: white;
 }

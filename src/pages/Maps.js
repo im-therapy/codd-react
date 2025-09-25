@@ -4,7 +4,7 @@ import { ReactComponent as TrafficActiveIcon } from '../assets/icons/Traffic Act
 import { ReactComponent as AvariaActiveIcon } from '../assets/icons/Avaria Active.svg';
 import { ReactComponent as FalseIcon } from '../assets/icons/false.svg';
 import { ReactComponent as SettingsIcon } from '../assets/icons/setts.svg';
-import SettingsPanel  from '../components/SettingsPanel'
+import SettingsPanel from '../components/SettingsPanel'
 import styles from '../styles/modules/Maps.module.css';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
@@ -73,10 +73,10 @@ export default function Maps() {
                     аварий
                 </span>
             </div>
-            <SettingsPanel isOpen={isSettingsVisible}/>
+            <SettingsPanel isOpen={isSettingsVisible} onClose={() => setIsSettingsVisible(false)}/>
             <button onClick={() => setIsSettingsVisible(true)} className={`${styles.card} ${styles.settingsCard}`}>
-                <SettingsIcon className={`${styles.icon} ${styles.iconGray}`} />
-                <span className={styles.textGray}>
+                <SettingsIcon className={`${styles.icon} ${isSettingsVisible ? styles.iconActive : styles.iconGray}`} />
+                <span className={isSettingsVisible ? styles.textActive : styles.textGray}>
                     Настройки
                 </span>
             </button>
