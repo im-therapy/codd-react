@@ -30,6 +30,7 @@ export default function Maps() {
         zoom: 16
     });
     const [accidentsCount] = useState(12);
+    const [mapType, setMapType] = useState('dark');
     useEffect(() => {
         if (!navigator.geolocation) return;
 
@@ -45,16 +46,33 @@ export default function Maps() {
         );
     }, []);
 
-    const mapStyle = {
-        version: 8,
-        sources: {
-            osm: {
-                type: 'raster',
-                tiles: ['https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'],
-                tileSize: 256
-            }
-        },
-        layers: [{ id: 'osm', type: 'raster', source: 'osm' }]
+    const getMapStyle = () => {
+        switch(mapType) {
+            case 'satellite':
+                return {
+                    version: 8,
+                    sources: {
+                        satellite: {
+                            type: 'raster',
+                            tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'],
+                            tileSize: 256
+                        }
+                    },
+                    layers: [{ id: 'satellite', type: 'raster', source: 'satellite' }]
+                };
+            default:
+                return {
+                    version: 8,
+                    sources: {
+                        osm: {
+                            type: 'raster',
+                            tiles: ['https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'],
+                            tileSize: 256
+                        }
+                    },
+                    layers: [{ id: 'osm', type: 'raster', source: 'osm' }]
+                };
+        }
     };
 
     return (
@@ -63,7 +81,7 @@ export default function Maps() {
                 {...viewState}
                 onMove={evt => setViewState(evt.viewState)}
                 style={{ width: '100%', height: '100%' }}
-                mapStyle={mapStyle}
+                mapStyle={getMapStyle()}
                 maxBounds={REGION_BOUNDS}
                 attributionControl={false}
             />
@@ -77,6 +95,51 @@ export default function Maps() {
             <div style={{ ...buttonStyle, left: 170, width: 145, cursor: 'pointer' }}>
                 <SettingsIcon style={{ width: 20, height: 20, color: '#676C75' }} />
                 <span style={{ color: '#676C75' }}>Настройки</span>
+            </div>
+            
+            <div style={{
+                position: 'fixed',
+                top: 100,
+                right: 16,
+                zIndex: 1000,
+                backgroundColor: 'rgba(12, 12, 12, 0.8)',
+                backdropFilter: 'blur(10px)',
+                WebkitBackdropFilter: 'blur(10px)',
+                border: '2px solid #1C1D1F',
+                borderRadius: 8,
+                padding: 8,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 4
+            }}>
+                <button 
+                    onClick={() => setMapType('dark')}
+                    style={{
+                        background: mapType === 'dark' ? '#62A744' : 'transparent',
+                        color: mapType === 'dark' ? 'white' : '#676C75',
+                        border: 'none',
+                        padding: '4px 8px',
+                        borderRadius: 4,
+                        cursor: 'pointer',
+                        fontSize: 12
+                    }}
+                >
+                    Темная
+                </button>
+                <button 
+                    onClick={() => setMapType('satellite')}
+                    style={{
+                        background: mapType === 'satellite' ? '#62A744' : 'transparent',
+                        color: mapType === 'satellite' ? 'white' : '#676C75',
+                        border: 'none',
+                        padding: '4px 8px',
+                        borderRadius: 4,
+                        cursor: 'pointer',
+                        fontSize: 12
+                    }}
+                >
+                    Спутник
+                </button>
             </div>
 
         </div>
