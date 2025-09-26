@@ -6,7 +6,7 @@ import { ReactComponent as FalseIcon } from '../assets/icons/false.svg';
 import { ReactComponent as SettingsIcon } from '../assets/icons/setts.svg';
 import SettingsPanel from '../components/SettingsPanel';
 import AccidentPanel from '../components/AccidentPanel';
-import { markersAPI, accidentsAPI } from '../services/api';
+import { getMarkers, getAccidentById } from '../services/dataService';
 import styles from '../styles/modules/Maps.module.css';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
@@ -16,12 +16,7 @@ export default function Maps() {
         latitude: 54.782,
         zoom: 12
     });
-    const [markers, setMarkers] = useState([
-        { id: 1, longitude: 32.045, latitude: 54.782, type: 'traffic_light', working: true },
-        { id: 2, longitude: 32.055, latitude: 54.792, type: 'accident', working: false },
-        { id: 3, longitude: 32.035, latitude: 54.775, type: 'traffic_light', working: false },
-        { id: 4, longitude: 32.065, latitude: 54.785, type: 'accident', working: true }
-    ]);
+    const [markers, setMarkers] = useState([]);
     const [accidentData, setAccidentData] = useState(null);
     const [accidentsCount] = useState(12);
     const [isSettingsVisible, setIsSettingsVisible] = useState(false);
@@ -30,20 +25,18 @@ export default function Maps() {
     useEffect(() => {
         const loadMarkers = async () => {
             try {
-                const response = await markersAPI.getAll();
-                setMarkers(response.data);
+                const data = await getMarkers();
+                setMarkers(data);
             } catch (error) {
                 console.error('Ошибка загрузки маркеров:', error);
             }
         };
-        
         loadMarkers();
     }, []);
 
     const fetchAccidentData = async (markerId) => {
         try {
-            const response = await accidentsAPI.getById(markerId);
-            return response.data;
+            return await getAccidentById(markerId);
         } catch (error) {
             console.error('Ошибка загрузки данных аварии:', error);
             return null;
@@ -104,24 +97,32 @@ export default function Maps() {
                     аварий
                 </span>
             </div>
-            <SettingsPanel isOpen={isSettingsVisible} onClose={() => setIsSettingsVisible(false)}/>
+            <SettingsPanel isOpen={isSettingsVisible} onClose={() => setIsSettingsVisible(false)} />
             {selectedMarker && (
-                <div style={{
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    background: 'rgba(0,0,0,0.5)',
-                    zIndex: 9999
-                }}>
-                    <AccidentPanel 
-                        accident={accidentData}
-                        onClose={() => {
-                            setSelectedMarker(null);
-                            setAccidentData(null);
-                        }}
-                    />
+                <div 
+                    style={{
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        background: 'rgba(0,0,0,0.5)',
+                        zIndex: 9999
+                    }}
+                    onClick={() => {
+                        setSelectedMarker(null);
+                        setAccidentData(null);
+                    }}
+                >
+                    <div onClick={(e) => e.stopPropagation()}>
+                        <AccidentPanel
+                            accident={accidentData}
+                            onClose={() => {
+                                setSelectedMarker(null);
+                                setAccidentData(null);
+                            }}
+                        />
+                    </div>
                 </div>
             )}
             <button onClick={() => setIsSettingsVisible(true)} className={`${styles.card} ${styles.settingsCard}`}>

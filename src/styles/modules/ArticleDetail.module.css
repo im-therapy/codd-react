@@ -1,0 +1,159 @@
+.container {
+    width: 100vw;
+    min-height: 100vh;
+    background: #0C0C0C;
+    padding-top: 120px;
+}
+
+.loading,
+.notFound {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50vh;
+    font-size: 1.2rem;
+    color: #FFFFFF;
+}
+
+.article {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    gap: 2.78vw;
+    width: 94.44vw;
+    margin: 0 auto;
+    margin-bottom: 200px;
+}
+
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 94.44vw;
+}
+
+.title {
+    width: 70vw;
+    font-weight: 600;
+    font-size: 3.61vw;
+    line-height: 112%;
+    color: #FFFFFF;
+    margin: 0;
+}
+
+
+
+.imageContainer {
+    width: 60vw;
+    height: 41.36vh;
+    border-radius: 2.78vw;
+    overflow: hidden;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.imagePlaceholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 60%;
+    aspect-ratio: 16/9;
+    background: #676C75;
+    color: #FFFFFF;
+    font-family: 'Manrope', sans-serif;
+    font-size: 1rem;
+    border-radius: 1rem;
+}
+
+.uploadIcon {
+    width: 2rem;
+    height: 2rem;
+    color: #FFFFFF;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0 0 10vh 0;
+    gap: 1.39vw;
+    width: 46.53vw;
+}
+
+.content p {
+    font-weight: 500;
+    font-size: 1.39vw;
+    line-height: 3.33vh;
+    color: #FFFFFF;
+    margin: 0 0 2.47vh 0;
+    width: 46.53vw;
+}
+
+.content h2 {
+    font-weight: 600;
+    font-size: 2.92vw;
+    line-height: 112%;
+    color: #FFFFFF;
+    margin: 0;
+    width: 46.53vw;
+}
+
+.footer {
+    display: none;
+}
+
+.likeBtn {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0.69vw 1.11vw;
+    gap: 0.56vw;
+    width: 9.38vw;
+    height: 4.94vh;
+    background: rgba(194, 31, 31, 0.25);
+    border-radius: 6.94vw;
+    border: none;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 600;
+    font-size: 0.97vw;
+    color: #C21F1F;
+    cursor: pointer;
+}
+
+.heartIcon {
+    width: 1.39vw;
+    height: 1.39vw;
+    color: #C21F1F;
+}
+
+@media (max-width: 768px) {
+    .container {
+        max-width: 90vw;
+        padding: 1rem;
+    }
+    
+    .title {
+        font-size: 2rem;
+    }
+    
+    .image {
+        max-width: 80%;
+    }
+    
+    .imagePlaceholder {
+        width: 80%;
+    }
+}

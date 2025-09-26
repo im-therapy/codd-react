@@ -95,8 +95,6 @@ export default function Auth() {
             }
             
             setIsLoading(true);
-            
-            // Используем JWT авторизацию
             login(formData.email, formData.password)
                 .then(result => {
                     if (result.success) {
@@ -124,8 +122,6 @@ export default function Auth() {
         }
         
         setIsLoading(true);
-        
-        // Используем JWT регистрацию
         register(formData.firstName, formData.lastName, formData.email, formData.password)
             .then(result => {
                 if (result.success) {
@@ -204,9 +200,6 @@ export default function Auth() {
                             onChange={handleInputChange}
                         />
                     </div>
-                    
-
-                    
                     <div className={styles.inputWithIcon}>
                         <PassKeyIcon className={styles.inputIcon} />
                         <input
@@ -218,9 +211,6 @@ export default function Auth() {
                             onChange={handleInputChange}
                         />
                     </div>
-                    
-
-                    
                     {!isLogin && passwordErrors.length > 0 && (
                         <div className={styles.passwordErrors} key={passwordErrors.join(',')}>
                             {passwordErrors.map((error, index) => (
@@ -231,7 +221,6 @@ export default function Auth() {
                 </div>
                 
                 <div className={styles.submitGroup}>
-                    
                     <button type="submit" className={styles.submitButton} disabled={isLoading}>
                         {isLoading ? 'Отправка...' : (isLogin ? 'Войти' : 'Зарегистрироваться')}
                     </button>
@@ -266,52 +255,6 @@ export default function Auth() {
                     onButtonClick={() => navigate('/')}
                 />
             )}
-
-            <footer className={styles.footer}>
-                <div className={styles.footerContent}>
-                    <div className={styles.footerSection}>
-                        <h3 className={styles.footerTitle}>Контакты</h3>
-                        <div className={styles.footerText}>Контактный телефон</div>
-                        <a href="tel:88005553535" className={styles.footerLink}>8 800 555-35-35</a>
-                        <div className={styles.footerText}>Почта поддержки ЦОДД</div>
-                        <a href="mailto:hi@codd.ru" className={styles.footerLink}>hi@codd.ru</a>
-                    </div>
-
-                    <div className={styles.footerSection}>
-                        <h3 className={styles.footerTitle}>Данные</h3>
-                        <div className={styles.footerText}>
-                            Государственное казённое учреждение Смоленской области «Центр организации дорожного движения» (ГКУ СО «ЦОДД»)
-                        </div>
-                        <div className={styles.footerLink}>Адрес</div>
-                        <div className={styles.footerText}>
-                            214015, Смоленская область, г. Смоленск, ул. Большая Краснофлотская, д. 70
-                        </div>
-                    </div>
-
-                    <div className={`${styles.footerSection} ${styles.newsletter}`}>
-                        <h3 className={styles.footerTitle}>Новостная рассылка</h3>
-                        <div className={styles.newsletterInput}>
-                            <EmailIcon className={styles.newsletterEmailIcon} />
-                            <input 
-                                type="email" 
-                                placeholder="Введите свой email"
-                                className={styles.newsletterEmailInput}
-                            />
-                            <button className={styles.newsletterButton}>
-                                Подписаться
-                                <RightIcon className={styles.rightIcon} />
-                            </button>
-                        </div>
-                        <p className={styles.newsletterDisclaimer}>
-                            Подписываясь на рассылку вы принимаете <a href="/privacy" className={styles.agreementLink}>условия обработки персональных данных</a>
-                        </p>
-                    </div>
-                </div>
-                
-                <div className={styles.copyright}>
-                    © 2025 ГКУ СО «ЦОДД». Все права защищены.
-                </div>
-            </footer>
         </div>
     );
 }

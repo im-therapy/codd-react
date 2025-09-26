@@ -1,89 +1,112 @@
-import { useState, useEffect } from 'react';
-import { articlesAPI } from '../services/api';
-import styles from '../styles/modules/PageStub.module.css';
+import { useState } from 'react';
+import { ReactComponent as EmailIcon } from '../assets/icons/Email.svg';
+import { ReactComponent as RightIcon } from '../assets/icons/right.svg';
+import ArticleCard from '../components/ArticleCard';
+import { subscribeNewsletter } from '../services/dataService';
+import { useArticles } from '../hooks/useArticles';
+import { ARTICLE_TAGS } from '../constants/routes';
+import '../styles/modules/Articles.css';
 
 export default function Articles() {
-    const [articles, setArticles] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const { articles, loading, error } = useArticles();
+    const [activeTab, setActiveTab] = useState(ARTICLE_TAGS.ALL);
+    const [email, setEmail] = useState('');
 
-    useEffect(() => {
-        const loadArticles = async () => {
-            try {
-                const response = await articlesAPI.getAll();
-                setArticles(response.data);
-            } catch (error) {
-                setError('Ошибка загрузки статей');
-                console.error('Ошибка загрузки статей:', error);
-            } finally {
-                setLoading(false);
+    const handleSubscribe = async (e) => {
+        e.preventDefault();
+        try {
+            const result = await subscribeNewsletter(email);
+            if (result.success) {
+                setEmail('');
+                alert(result.message);
             }
-        };
-        
-        loadArticles();
-    }, []);
+        } catch (error) {
+            console.error('Ошибка подписки:', error);
+        }
+    };
 
-    if (loading) return <div className={styles.container}><h1 className={styles.title}>Загрузка...</h1></div>;
-    if (error) return <div className={styles.container}><h1 className={styles.title}>{error}</h1></div>;
+    const filteredArticles = articles.filter(article => {
+        if (activeTab === ARTICLE_TAGS.ALL) return true;
+        return article.tags.includes(activeTab);
+    });
+
+    if (loading) return <div className="articles-loading">Загрузка...</div>;
+    if (error) return <div className="articles-error">{error}</div>;
 
     return (
-        <div className={styles.container}>
-            <h1 className={styles.title}>СТАТЬИ</h1>
-            
-            <div style={{ display: 'grid', gap: '20px', marginTop: '40px' }}>
-                {articles.map(article => (
-                    <div key={article.id} style={{ 
-                        background: 'var(--color-black-plus)', 
-                        border: '2px solid #1C1D1F',
-                        borderRadius: '16px',
-                        padding: '20px'
-                    }}>
-                        {article.photo_url && (
-                            <img 
-                                src={article.photo_url} 
-                                alt={article.title}
-                                style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '12px', marginBottom: '16px' }}
+        <div className="articles-container">
+            <section className="hero">
+                <div className="hero-content">
+                    <h1 className="hero-title">Дорожный блог Смоленска</h1>
+
+                    <form className="newsletter-form" onSubmit={handleSubscribe}>
+                        <div className="newsletter-input">
+                            <EmailIcon className="email-icon" />
+                            <input
+                                type="email"
+                                placeholder="Введите свой email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="email-input"
+                                required
                             />
-                        )}
-                        
-                        <h2 style={{ color: 'white', fontSize: '24px', marginBottom: '12px' }}>{article.title}</h2>
-                        <p style={{ color: 'var(--color-gray)', marginBottom: '16px' }}>{article.description}</p>
-                        
-                        {article.tags && article.tags.length > 0 && (
-                            <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
-                                {article.tags.map((tag, index) => (
-                                    <span key={index} style={{
-                                        background: 'var(--color-black)',
-                                        color: 'white',
-                                        padding: '4px 12px',
-                                        borderRadius: '20px',
-                                        fontSize: '12px'
-                                    }}>{tag}</span>
-                                ))}
-                            </div>
-                        )}
-                        
-                        <a 
-                            href={article.full_link} 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            style={{
-                                color: 'white',
-                                textDecoration: 'underline',
-                                fontWeight: '600'
-                            }}
-                        >
-                            Читать полностью
-                        </a>
-                    </div>
+                            <button type="submit" className="subscribe-btn">
+                                Подписаться
+                                <RightIcon className="right-icon" />
+                            </button>
+                        </div>
+                        <p className="newsletter-disclaimer">
+                            Подписываясь на рассылку вы принимаете <a href="/privacy" style={{color: '#FFFFFF', textDecoration: 'none'}}>условия обработки персональных данных</a>
+                        </p>
+                    </form>
+                </div>
+                
+                <div className="hero-description">
+                    <p>
+                        Образовательные статьи, новые законы, новости Смоленской области в сфере ЦОДД и не только. 
+                        Подпишитесь на рассылку чтобы следить за новыми статьями
+                    </p>
+                </div>
+            </section>
+            <div className="tabs">
+                <button 
+                    className={`tab ${activeTab === ARTICLE_TAGS.ALL ? 'active' : ''}`}
+                    onClick={() => setActiveTab(ARTICLE_TAGS.ALL)}
+                >
+                    Все статьи
+                </button>
+                <button 
+                    className={`tab ${activeTab === ARTICLE_TAGS.EDUCATIONAL ? 'active' : ''}`}
+                    onClick={() => setActiveTab(ARTICLE_TAGS.EDUCATIONAL)}
+                >
+                    Образовательные
+                </button>
+                <button 
+                    className={`tab ${activeTab === ARTICLE_TAGS.NEW_LAWS ? 'active' : ''}`}
+                    onClick={() => setActiveTab(ARTICLE_TAGS.NEW_LAWS)}
+                >
+                    Новые законы
+                </button>
+                <button 
+                    className={`tab ${activeTab === ARTICLE_TAGS.NEWS ? 'active' : ''}`}
+                    onClick={() => setActiveTab(ARTICLE_TAGS.NEWS)}
+                >
+                    Новости
+                </button>
+            </div>
+
+            <div className="articles-grid">
+                {filteredArticles.map(article => (
+                    <ArticleCard key={article.id} article={article} />
                 ))}
             </div>
             
-            {articles.length === 0 && !loading && (
-                <p style={{ color: 'var(--color-gray)', textAlign: 'center', marginTop: '40px' }}>
+            {filteredArticles.length === 0 && (
+                <div className="no-articles">
                     Статьи не найдены
-                </p>
+                </div>
             )}
+            <div className="articles-spacer"></div>
         </div>
     );
 }

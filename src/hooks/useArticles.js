@@ -1,0 +1,26 @@
+import { useState, useEffect } from 'react';
+import { getArticles } from '../services/dataService';
+
+export const useArticles = () => {
+    const [articles, setArticles] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const loadArticles = async () => {
+            try {
+                const data = await getArticles();
+                setArticles(data);
+            } catch (error) {
+                setError('Ошибка загрузки статей');
+                console.error('Ошибка загрузки статей:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        
+        loadArticles();
+    }, []);
+
+    return { articles, loading, error };
+};

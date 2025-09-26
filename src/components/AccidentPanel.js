@@ -1,6 +1,6 @@
 import React from 'react';
 import { ReactComponent as UploadIcon } from '../assets/icons/upload.svg';
-import './AccidentPanel.css';
+import '../styles/modules/AccidentPanel.css';
 
 const AccidentPanel = ({ accident, onClose }) => {
   const { photo, longitude, latitude, date, time } = accident || {};

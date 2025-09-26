@@ -9,7 +9,6 @@ const api = axios.create({
   },
 });
 
-// Interceptor для добавления токена
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
@@ -18,7 +17,6 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Interceptor для обработки ошибок
 api.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -57,6 +55,35 @@ export const articlesAPI = {
 
 export const newsletterAPI = {
   subscribe: (email) => api.post('/newsletter', { email }),
+};
+
+export const statisticsAPI = {
+  getFines: (startDate, endDate) => 
+    api.get('/statistics/fines', { params: { startDate, endDate } }),
+  
+  getEvacuations: (startDate, endDate) => 
+    api.get('/statistics/evacuations', { params: { startDate, endDate } }),
+  
+  getAccidents: (startDate, endDate) => 
+    api.get('/statistics/accidents', { params: { startDate, endDate } }),
+};
+
+export const trafficLightsAPI = {
+  getAll: () => api.get('/traffic-lights'),
+};
+
+export const adminAPI = {
+  importData: (formData, dataType) => 
+    api.post('/admin/import', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+      params: { data_type: dataType }
+    }),
+  
+  exportData: (type, format) => 
+    api.get(`/admin/export/${type}`, {
+      params: { format },
+      responseType: 'blob'
+    }),
 };
 
 export default api;

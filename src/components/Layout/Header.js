@@ -57,13 +57,13 @@ export default function Header() {
                     <MapIcon className={`${styles.icon} ${location.pathname === '/maps' ? styles.iconActive : styles.iconInactive}`} />
                     Карты
                 </Link>
-                {/* <Link
+                <Link
                     to="/analytics"
                     className={`${styles.navLink} ${location.pathname === '/analytics' ? styles.navLinkActive : styles.navLinkInactive}`}
                 >
                     <AnalIcon className={`${styles.icon} ${location.pathname === '/analytics' ? styles.iconActive : styles.iconInactive}`} />
                     Аналитика
-                </Link> */}
+                </Link>
             </nav>
 
             {isAuthenticated ? (
