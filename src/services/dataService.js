@@ -1,7 +1,7 @@
 import { USE_MOCK_DATA } from '../constants/config';
 import { mockArticles } from '../data/mockArticles';
 import { mockMarkers, mockAccidents } from '../data/mockMarkers';
-import { articlesAPI, markersAPI, accidentsAPI, authAPI, newsletterAPI } from './api';
+import { articlesAPI, markersAPI, accidentsAPI, authAPI, newsletterAPI, statisticsAPI } from './api';
 
 // Articles
 export const getArticles = async () => {
@@ -82,6 +82,46 @@ export const getAccidentsCount = async () => {
     // В реальном API это может быть отдельный endpoint или часть статистики
     const markers = await getMarkers();
     return markers.filter(m => m.type === 'accident').length;
+};
+
+export const getAccidentStatistics = async (startDate, endDate) => {
+    if (USE_MOCK_DATA) {
+        return {
+            total: 798,
+            withInjuries: 686,
+            fatal: 112,
+            monthlyData: [
+                { month: 'Янв', accidents: 100, fatal: 40 },
+                { month: 'Фев', accidents: 70, fatal: 53 },
+                { month: 'Мар', accidents: 66, fatal: 43 },
+                { month: 'Апр', accidents: 69, fatal: 31 },
+                { month: 'Май', accidents: 76, fatal: 14 },
+                { month: 'Июн', accidents: 78, fatal: 10 },
+                { month: 'Июл', accidents: 83, fatal: 17 },
+                { month: 'Авг', accidents: 87, fatal: 22 },
+                { month: 'Сен', accidents: 95, fatal: 25 },
+                { month: 'Окт', accidents: 77, fatal: 17 },
+                { month: 'Ноя', accidents: 53, fatal: 13 },
+                { month: 'Дек', accidents: 46, fatal: 11 }
+            ]
+        };
+    }
+    // API запрос
+    return {};
+};
+
+export const getDangerousStreets = async () => {
+    if (USE_MOCK_DATA) {
+        return [
+            { name: 'Пятницкая улица', accidents: 257, fatal: 131 },
+            { name: 'Коварный перекресток', accidents: 253, fatal: 43 },
+            { name: 'Переулок разочарования', accidents: 177, fatal: 59 },
+            { name: 'Проспект Победы', accidents: 128, fatal: 57 },
+            { name: 'Улица Кирова', accidents: 63, fatal: 26 }
+        ];
+    }
+    // API запрос
+    return [];
 };
 
 // Likes

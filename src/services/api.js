@@ -31,7 +31,7 @@ api.interceptors.response.use(
 export const authAPI = {
   register: (firstName, lastName, email, password) =>
     api.post('/auth/register', { firstName, lastName, email, password }),
-  
+
   login: (email, password) =>
     api.post('/auth/login', { email, password }),
 };
@@ -61,13 +61,13 @@ export const newsletterAPI = {
 };
 
 export const statisticsAPI = {
-  getFines: (startDate, endDate) => 
+  getFines: (startDate, endDate) =>
     api.get('/statistics/fines', { params: { startDate, endDate } }),
-  
-  getEvacuations: (startDate, endDate) => 
+
+  getEvacuations: (startDate, endDate) =>
     api.get('/statistics/evacuations', { params: { startDate, endDate } }),
-  
-  getAccidents: (startDate, endDate) => 
+
+  getAccidents: (startDate, endDate) =>
     api.get('/statistics/accidents', { params: { startDate, endDate } }),
 };
 
@@ -76,13 +76,13 @@ export const trafficLightsAPI = {
 };
 
 export const adminAPI = {
-  importData: (formData, dataType) => 
+  importData: (formData, dataType) =>
     api.post('/admin/import', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
       params: { data_type: dataType }
     }),
-  
-  exportData: (type, format) => 
+
+  exportData: (type, format) =>
     api.get(`/admin/export/${type}`, {
       params: { format },
       responseType: 'blob'

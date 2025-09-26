@@ -30,8 +30,25 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
-            // В реальном проекте тут была бы проверка токена
-            // Пока просто считаем что токен валидный
+            try {
+                // Декодируем JWT токен
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                
+                // Проверяем срок действия
+                if (payload.exp * 1000 > Date.now()) {
+                    setUser({
+                        id: payload.id,
+                        email: payload.email,
+                        name: payload.name
+                    });
+                } else {
+                    // Токен просрочен
+                    localStorage.removeItem('token');
+                }
+            } catch (error) {
+                // Невалидный токен
+                localStorage.removeItem('token');
+            }
         }
         setLoading(false);
     }, []);
