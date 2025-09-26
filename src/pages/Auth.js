@@ -1,23 +1,62 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ReactComponent as RightIcon } from '../assets/icons/right.svg';
+import { ReactComponent as UserDataIcon } from '../assets/icons/User data.svg';
+import { ReactComponent as EmailIcon } from '../assets/icons/Email.svg';
+import { ReactComponent as PassKeyIcon } from '../assets/icons/Pass key.svg';
+import { useAuth } from '../contexts/AuthContext';
 import styles from '../styles/modules/Auth.module.css';
+
+const SuccessMessage = ({ title, text, buttonText, onButtonClick }) => {
+    const handleClick = () => {
+        if (onButtonClick) {
+            onButtonClick();
+        }
+    };
+    
+    return (
+        <div className={styles.successMessage}>
+            <h1 className={styles.successTitle}>{title}</h1>
+            <p className={styles.successText}>{text}</p>
+            <button className={styles.successButton} onClick={handleClick}>
+                {buttonText}
+            </button>
+        </div>
+    );
+};
 
 export default function Auth() {
     const [isLogin, setIsLogin] = useState(false);
     const [formData, setFormData] = useState({
+        firstName: '',
+        lastName: '',
         email: '',
-        password: '',
-        confirmPassword: '',
-        phone: ''
+        password: ''
     });
     const [passwordErrors, setPasswordErrors] = useState([]);
+    const [isRegistrationSuccess, setIsRegistrationSuccess] = useState(false);
+    const [isLoginSuccess, setIsLoginSuccess] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [formError, setFormError] = useState('');
+    const [isErrorFading, setIsErrorFading] = useState(false);
+    const [userName, setUserName] = useState('');
+    
+    const { login, register } = useAuth();
+    const navigate = useNavigate();
 
-    const validatePassword = (password, confirmPassword = '') => {
+    const validatePassword = (password) => {
         const errors = [];
+        if (password.length === 0) return errors;
         if (password.length < 8) errors.push('Пароль должен содержать минимум 8 символов');
-        if (!/^[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/.test(password)) errors.push('Пароль должен содержать только латинские буквы и символы');
-        if (!isLogin && confirmPassword && password !== confirmPassword) errors.push('Пароли не совпадают');
+        if (!/[0-9]/.test(password)) errors.push('Пароль должен содержать цифры');
+        if (!/^[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/.test(password)) errors.push('Пароль должен содержать только латинские символы');
         return errors;
+    };
+
+    const resetForm = () => {
+        setFormData({ firstName: '', lastName: '', email: '', password: '' });
+        setPasswordErrors([]);
+        setFormError('');
     };
 
     const handleInputChange = (e) => {
@@ -27,88 +66,163 @@ export default function Auth() {
             [name]: value
         });
         
-        if (name === 'password' || name === 'confirmPassword') {
-            const password = name === 'password' ? value : formData.password;
-            const confirmPassword = name === 'confirmPassword' ? value : formData.confirmPassword;
-            setPasswordErrors(validatePassword(password, confirmPassword));
+        if (name === 'password') {
+            setPasswordErrors(validatePassword(value));
+        }
+        
+        if (formError) {
+            setIsErrorFading(true);
+            setTimeout(() => {
+                setFormError('');
+                setIsErrorFading(false);
+            }, 300);
         }
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('Form submitted:', formData);
+        
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        
+        if (isLogin) {
+            if (!formData.email || !formData.password) {
+                setFormError('Заполните все поля');
+                return;
+            }
+            if (!emailRegex.test(formData.email)) {
+                setFormError('Некорректная почта');
+                return;
+            }
+            
+            setIsLoading(true);
+            
+            // Используем JWT авторизацию
+            login(formData.email, formData.password)
+                .then(result => {
+                    if (result.success) {
+                        setUserName(result.user.name);
+                        setIsLoginSuccess(true);
+                        resetForm();
+                    } else {
+                        setFormError(result.error || 'Ошибка входа');
+                    }
+                })
+                .finally(() => {
+                    setIsLoading(false);
+                });
+            return;
+        }
+        
+        if (!formData.firstName || !formData.lastName || !formData.email || !formData.password) {
+            setFormError('Заполните все поля');
+            return;
+        }
+        
+        if (!emailRegex.test(formData.email)) {
+            setFormError('Некорректная почта');
+            return;
+        }
+        
+        setIsLoading(true);
+        
+        // Используем JWT регистрацию
+        register(formData.firstName, formData.lastName, formData.email, formData.password)
+            .then(result => {
+                if (result.success) {
+                    setIsRegistrationSuccess(true);
+                    resetForm();
+                } else {
+                    setFormError(result.error || 'Ошибка регистрации');
+                }
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
     };
 
     return (
         <div className={styles.container}>
 
-            <div className={styles.toggleButtons}>
-                <button 
-                    className={`${styles.toggleButton} ${!isLogin ? styles.toggleButtonActive : styles.toggleButtonInactive}`}
-                    onClick={() => setIsLogin(false)}
-                >
-                    Регистрация
-                </button>
-                <button 
-                    className={`${styles.toggleButton} ${isLogin ? styles.toggleButtonActive : styles.toggleButtonInactive}`}
-                    onClick={() => setIsLogin(true)}
-                >
-                    Вход
-                </button>
-            </div>
+            {!isRegistrationSuccess && !isLoginSuccess && (
+                <div className={styles.toggleButtons}>
+                    <button 
+                        className={`${styles.toggleButton} ${!isLogin ? styles.toggleButtonActive : styles.toggleButtonInactive}`}
+                        onClick={() => setIsLogin(false)}
+                    >
+                        Регистрация
+                    </button>
+                    <button 
+                        className={`${styles.toggleButton} ${isLogin ? styles.toggleButtonActive : styles.toggleButtonInactive}`}
+                        onClick={() => setIsLogin(true)}
+                    >
+                        Вход
+                    </button>
+                </div>
+            )}
 
-            <form className={styles.authForm} onSubmit={handleSubmit}>
+            {!isRegistrationSuccess && !isLoginSuccess ? (
+                <form className={styles.authForm} onSubmit={handleSubmit}>
                 <h1 className={styles.title}>
                     {isLogin ? 'Авторизация' : 'Регистрация'}
                 </h1>
                 
                 <div className={styles.inputGroup}>
-                    <input
-                        type="email"
-                        name="email"
-                        placeholder="Email"
-                        className={styles.input}
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        required
-                    />
-                    
                     {!isLogin && (
-                        <input
-                            type="tel"
-                            name="phone"
-                            placeholder="Телефон"
-                            className={styles.input}
-                            value={formData.phone}
-                            onChange={handleInputChange}
-                            required
-                        />
+                        <>
+                            <div className={styles.inputWithIcon}>
+                                <UserDataIcon className={styles.inputIcon} />
+                                <input
+                                    type="text"
+                                    name="firstName"
+                                    placeholder="Имя"
+                                    className={styles.input}
+                                    value={formData.firstName}
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+                            <div className={styles.inputWithIcon}>
+                                <UserDataIcon className={styles.inputIcon} />
+                                <input
+                                    type="text"
+                                    name="lastName"
+                                    placeholder="Фамилия"
+                                    className={styles.input}
+                                    value={formData.lastName}
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+                        </>
                     )}
+                    <div className={styles.inputWithIcon}>
+                        <EmailIcon className={styles.inputIcon} />
+                        <input
+                            type="text"
+                            name="email"
+                            placeholder="Email"
+                            className={styles.input}
+                            value={formData.email}
+                            onChange={handleInputChange}
+                        />
+                    </div>
                     
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="Пароль"
-                        className={styles.input}
-                        value={formData.password}
-                        onChange={handleInputChange}
-                        required
-                    />
+
                     
-                    {!isLogin && (
+                    <div className={styles.inputWithIcon}>
+                        <PassKeyIcon className={styles.inputIcon} />
                         <input
                             type="password"
-                            name="confirmPassword"
-                            placeholder="Подтвердите пароль"
+                            name="password"
+                            placeholder="Пароль"
                             className={styles.input}
-                            value={formData.confirmPassword}
+                            value={formData.password}
                             onChange={handleInputChange}
-                            required
                         />
-                    )}
+                    </div>
+                    
+
                     
                     {!isLogin && passwordErrors.length > 0 && (
-                        <div className={styles.passwordErrors}>
+                        <div className={styles.passwordErrors} key={passwordErrors.join(',')}>
                             {passwordErrors.map((error, index) => (
                                 <div key={index} className={styles.passwordError}>{error}</div>
                             ))}
@@ -117,17 +231,41 @@ export default function Auth() {
                 </div>
                 
                 <div className={styles.submitGroup}>
-                    <button type="submit" className={styles.submitButton}>
-                        {isLogin ? 'Войти' : 'Зарегистрироваться'}
+                    
+                    <button type="submit" className={styles.submitButton} disabled={isLoading}>
+                        {isLoading ? 'Отправка...' : (isLogin ? 'Войти' : 'Зарегистрироваться')}
                     </button>
                     
                     {!isLogin && (
                         <p className={styles.disclaimer}>
-                            Создавая аккаунт вы принимаете <a href="#" className={styles.agreementLink}>условия пользовательского соглашения</a>
+                            Создавая аккаунт вы принимаете <a href="/terms" className={styles.agreementLink}>условия пользовательского соглашения</a>
                         </p>
+                    )}
+                    
+                    {formError && (
+                        <div className={`${styles.formError} ${isErrorFading ? styles.fadeOut : ''}`}>{formError}</div>
                     )}
                 </div>
             </form>
+            ) : isRegistrationSuccess ? (
+                <SuccessMessage 
+                    title="Почти готово"
+                    text="На вашу почту отправлено письмо с подтверждением. Перейдите по ссылке из письма, чтобы подтвердить адрес. После этого вы сможете войти в аккаунт."
+                    buttonText="Войти в аккаунт"
+                    onButtonClick={() => {
+                        setIsRegistrationSuccess(false);
+                        setIsLogin(true);
+                        setFormData({ firstName: '', lastName: '', email: '', password: '' });
+                    }}
+                />
+            ) : (
+                <SuccessMessage 
+                    title="С возвращением"
+                    text={`Рады вас видеть снова, ${userName}`}
+                    buttonText="Перейти на главную"
+                    onButtonClick={() => navigate('/')}
+                />
+            )}
 
             <footer className={styles.footer}>
                 <div className={styles.footerContent}>
@@ -138,22 +276,22 @@ export default function Auth() {
                         <div className={styles.footerText}>Почта поддержки ЦОДД</div>
                         <a href="mailto:hi@codd.ru" className={styles.footerLink}>hi@codd.ru</a>
                     </div>
-                    
+
                     <div className={styles.footerSection}>
                         <h3 className={styles.footerTitle}>Данные</h3>
                         <div className={styles.footerText}>
                             Государственное казённое учреждение Смоленской области «Центр организации дорожного движения» (ГКУ СО «ЦОДД»)
                         </div>
-                        <div className={styles.footerText}>Адресс</div>
-                        <div className={styles.footerLink}>
+                        <div className={styles.footerLink}>Адрес</div>
+                        <div className={styles.footerText}>
                             214015, Смоленская область, г. Смоленск, ул. Большая Краснофлотская, д. 70
                         </div>
                     </div>
-                    
+
                     <div className={`${styles.footerSection} ${styles.newsletter}`}>
                         <h3 className={styles.footerTitle}>Новостная рассылка</h3>
                         <div className={styles.newsletterInput}>
-                            <span className={styles.emailPrefix}>@</span>
+                            <EmailIcon className={styles.newsletterEmailIcon} />
                             <input 
                                 type="email" 
                                 placeholder="Введите свой email"
@@ -164,8 +302,8 @@ export default function Auth() {
                                 <RightIcon className={styles.rightIcon} />
                             </button>
                         </div>
-                        <p className={styles.disclaimer}>
-                            Подписываясь на рассылку при принимаете условия обработки персональных данных
+                        <p className={styles.newsletterDisclaimer}>
+                            Подписываясь на рассылку вы принимаете <a href="/privacy" className={styles.agreementLink}>условия обработки персональных данных</a>
                         </p>
                     </div>
                 </div>

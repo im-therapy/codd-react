@@ -11,7 +11,7 @@ const routes = [
     { path: "/analytics", element: <Analytics /> },
     { path: "/maps", element: <Maps /> },
     { path: "/auth", element: <Auth /> },
-    { path: "*", element: <NotFound /> },
+    { path: "*", element: <NotFound /> }
 ];
 
 export default routes;

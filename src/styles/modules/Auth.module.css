@@ -83,32 +83,76 @@ body {
 }
 
 .input {
-    display: flex;
-    align-items: center;
-    padding: 0.83vw;
-    gap: 0.56vw;
     width: 100%;
     height: 5.43vh;
     border: 2px solid var(--color-black-plus);
     border-radius: 12px;
-    background: transparent;
-    color: var(--color-gray);
+    background: transparent !important;
+    color: var(--color-gray) !important;
     font-family: 'Manrope', sans-serif;
     font-weight: 500;
     font-size: 0.97vw;
     line-height: 2.35vh;
     box-sizing: border-box;
+    padding: 0.83vw;
+    transition: color 0.3s ease;
+    vertical-align: baseline;
 }
 
 .input:focus {
     outline: none;
     border-color: var(--color-white);
+    color: var(--color-white) !important;
+}
+
+.input:not(:placeholder-shown) {
+    color: var(--color-white) !important;
+}
+
+.input:-webkit-autofill,
+.input:-webkit-autofill:hover,
+.input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+    -webkit-text-fill-color: var(--color-gray) !important;
+    background-color: transparent !important;
+}
+
+.inputWithIcon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.inputWithIcon .input {
+    padding-left: 3.2vw;
+}
+
+.inputWithIcon .inputIcon {
+    position: absolute;
+    left: 0.83vw;
+    z-index: 1;
+}
+
+
+
+.newsletterEmailInput:focus {
+    outline: none;
 }
 
 .inputIcon {
     width: 1.39vw;
     height: 1.39vw;
-    color: var(--color-gray);
+    transition: color 0.3s ease;
+}
+
+.inputIcon path {
+    stroke: #676C75;
+    transition: stroke 0.3s ease;
+}
+
+.inputWithIcon:focus-within .inputIcon path {
+    stroke: #FFFFFF;
 }
 
 .submitGroup {
@@ -137,16 +181,14 @@ body {
     cursor: pointer;
 }
 
-.submitButton:hover {
-    background: var(--color-green);
-}
+
 
 .disclaimer {
     font-weight: 500;
     font-size: 0.69vw;
     line-height: 1.73vh;
     color: var(--color-gray);
-    text-align: center;
+    text-align: left;
 }
 
 .agreementLink {
@@ -169,6 +211,38 @@ body {
     font-size: 0.69vw;
     color: #ff4444;
     font-weight: 500;
+    opacity: 1;
+    animation: fadeIn 0.3s ease;
+}
+
+.passwordErrors {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5vh;
+    margin-top: -0.5vh;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
 }
 
 .footer {
@@ -221,6 +295,10 @@ body {
     font-size: 0.97vw;
     line-height: 2.35vh;
     color: var(--color-gray);
+    user-select: text;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
 }
 
 .footerLink {
@@ -229,6 +307,10 @@ body {
     line-height: 2.35vh;
     color: var(--color-white);
     text-decoration: none;
+    user-select: text;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
 }
 
 .newsletter {
@@ -249,10 +331,10 @@ body {
     box-sizing: border-box;
 }
 
-.emailPrefix {
+.newsletterEmailIcon {
+    width: 1.39vw;
+    height: 1.39vw;
     color: var(--color-gray);
-    font-size: 1.25vw;
-    font-weight: 500;
 }
 
 .newsletterEmailInput {
@@ -264,6 +346,86 @@ body {
     font-size: 1.25vw;
     font-family: 'Manrope', sans-serif;
     font-weight: 500;
+    margin-left: 0.4vw;
+}
+
+.newsletterDisclaimer {
+    font-weight: 500;
+    font-size: 0.69vw;
+    line-height: 1.73vh;
+    color: var(--color-gray);
+    text-align: left;
+    margin-top: 0.5vh;
+}
+
+.successMessage {
+    position: absolute;
+    width: 46.53vw;
+    height: 20.74vh;
+    left: 50%;
+    top: 37.65vh;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    gap: 2.47vh;
+}
+
+.successTitle {
+    width: 100%;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 600;
+    font-size: 2.92vw;
+    line-height: 112%;
+    text-align: center;
+    color: #FFFFFF;
+    margin: 0;
+}
+
+.successText {
+    width: 100%;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 500;
+    font-size: 0.97vw;
+    line-height: 1.6;
+    text-align: center;
+    color: #FFFFFF;
+    margin: 0;
+}
+
+.successButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.83vw 1.11vw;
+    gap: 0.56vw;
+    width: 22.57vw;
+    height: 5.31vh;
+    background: #1F2124;
+    border: none;
+    border-radius: 14px;
+    color: #FFFFFF;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 600;
+    font-size: 0.97vw;
+    line-height: 1.32vh;
+    cursor: pointer;
+}
+
+.formError {
+    font-size: 0.69vw;
+    color: #ff4444;
+    font-weight: 500;
+    text-align: left;
+    margin-top: 0.5vh;
+    opacity: 1;
+    animation: fadeIn 0.3s ease;
+    width: 22.64vw;
+}
+
+.formError.fadeOut {
+    animation: fadeOut 0.3s ease forwards;
 }
 
 .newsletterButton {

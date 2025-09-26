@@ -1,0 +1,197 @@
+.accident-panel {
+  position: fixed;
+  top: 100px;
+  right: 16px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 1.67vw;
+  gap: 2.22vw;
+  width: min(34.72vw, calc(100vw - 32px));
+  height: min(85.43vh, calc(100vh - 120px));
+  background: rgba(12, 12, 12, 0.8);
+  border: 2px solid #1F2124;
+  backdrop-filter: blur(8px);
+  border-radius: 1.39vw;
+}
+
+.accident-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0;
+  gap: 2.22vw;
+  width: 31.39vw;
+  height: 61.51vh;
+}
+
+.accident-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0;
+  gap: 1.11vw;
+  width: 31.39vw;
+  height: 5.93vh;
+}
+
+.accident-icon {
+  position: relative;
+  width: 3.89vw;
+  height: 5.93vh;
+}
+
+.icon-bg {
+  position: absolute;
+  width: 2.22vw;
+  height: 5.93vh;
+  left: 0;
+  top: 0;
+  background: #800D0D;
+  box-shadow: inset 1px 1px 4px -1px #B82525, inset 1px -1px 4px -1px #5C0707;
+  border-radius: 6.94vw 0 0 6.94vw;
+}
+
+.icon-circle {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.33vw;
+  height: 5.93vh;
+  right: 0.28vw;
+  top: 0;
+  background: linear-gradient(90deg, #C21F1F 0%, #800D0D 100%);
+  box-shadow: inset 2px 2px 2px -1px #DB2C2C;
+  border-radius: 6.94vw;
+}
+
+.accident-header h3 {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 600;
+  font-size: 2.22vw;
+  line-height: 112%;
+  color: #FFFFFF;
+  margin: 0;
+  flex-grow: 1;
+}
+
+.accident-details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0;
+  gap: 1.67vw;
+  width: 31.39vw;
+}
+
+.photo-section {
+  width: 31.39vw;
+  height: 31.39vh;
+  border-radius: 2.22vw;
+  overflow: hidden;
+}
+
+.accident-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.photo-placeholder {
+  width: 100%;
+  height: 100%;
+  background: rgba(31, 33, 36, 0.5);
+  border: 2px dashed #676C75;
+  border-radius: 2.22vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.83vw;
+}
+
+.placeholder-icon {
+  width: 3.33vw;
+  height: 3.33vw;
+  opacity: 0.5;
+  color: #676C75;
+}
+
+.photo-placeholder span {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 500;
+  font-size: 1.11vw;
+  color: #676C75;
+}
+
+.accident-details h4 {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 600;
+  font-size: 1.81vw;
+  line-height: 2.5vw;
+  color: #FFFFFF;
+  margin: 0;
+  width: 31.39vw;
+}
+
+.info-grid {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 1fr 9.03vw 22.36vw;
+  width: 31.39vw;
+  border: 2px solid #1F2124;
+  border-radius: 1.11vw;
+  overflow: hidden;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  padding: 0.97vw;
+  gap: 0.56vw;
+  height: 5.93vh;
+  box-sizing: border-box;
+}
+
+.address-row {
+  grid-column: 1 / -1;
+  border-bottom: 2px solid #1F2124;
+}
+
+.date-row {
+  border-right: 2px solid #1F2124;
+}
+
+.time-row {
+  /* no additional styles needed */
+}
+
+.info-row span {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 500;
+  font-size: 0.97vw;
+  line-height: 1.32vw;
+  color: #FFFFFF;
+  flex-grow: 1;
+}
+
+.close-button {
+  display: flex;
+  align-items: center;
+  padding: 0.83vw 1.11vw;
+  gap: 0.56vw;
+  width: 8.19vw;
+  height: 5.43vh;
+  background: #1F2124;
+  border: none;
+  border-radius: 0.97vw;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 600;
+  font-size: 0.97vw;
+  color: #FFFFFF;
+  cursor: pointer;
+  align-self: flex-end;
+}

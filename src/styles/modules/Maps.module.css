@@ -15,6 +15,12 @@
 .marker {
     width: 24px;
     height: 24px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.marker:hover {
+    transform: scale(1.1);
 }
 
 .card {

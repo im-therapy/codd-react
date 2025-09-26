@@ -125,7 +125,7 @@
 
 .durationInfoPeriodInput:focus {
     outline: none;
-    border-color: var(--color-green);
+    border-color: var(--color-white);
 }
 
 .durationInfoIcon {
@@ -165,7 +165,7 @@
 }
 
 .acceptButton:hover {
-    background-color: var(--color-green);
+    background-color: #2A2D31;
 }
 
 .switch {

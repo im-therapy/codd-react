@@ -5,26 +5,32 @@ import { ReactComponent as NewsIcon } from '../../assets/icons/news.svg';
 import { ReactComponent as AnalIcon } from '../../assets/icons/Anal.svg';
 import { ReactComponent as MapIcon } from '../../assets/icons/map.svg';
 import { ReactComponent as AuthIcon } from '../../assets/icons/auth.svg';
+import { useAuth } from '../../contexts/AuthContext';
 import styles from '../../styles/modules/Header.module.css';
 
 export default function Header() {
     const location = useLocation();
     const [isVisible, setIsVisible] = useState(false);
-    
+    const { user, logout, isAuthenticated } = useAuth();
+
     useEffect(() => {
         const handleScroll = () => {
             const scrollY = window.scrollY;
             setIsVisible(scrollY > 100);
         };
-        
+
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    const isAuthPage = location.pathname === '/auth';
+    const handleAuthClick = () => {
+        if (isAuthenticated) {
+            logout();
+        }
+    };
 
     return (
-        <header className={`${styles.header} ${isAuthPage || isVisible ? styles.headerVisible : styles.headerHidden}`}>
+        <header className={`${styles.header} ${styles.headerVisible}`}>
             <Link to="/" className={styles.logo}>
                 <span className={styles.logoAccent}>ЦОДД</span> Смоленской области
             </Link>
@@ -51,22 +57,32 @@ export default function Header() {
                     <MapIcon className={`${styles.icon} ${location.pathname === '/maps' ? styles.iconActive : styles.iconInactive}`} />
                     Карты
                 </Link>
-                <Link
+                {/* <Link
                     to="/analytics"
                     className={`${styles.navLink} ${location.pathname === '/analytics' ? styles.navLinkActive : styles.navLinkInactive}`}
                 >
                     <AnalIcon className={`${styles.icon} ${location.pathname === '/analytics' ? styles.iconActive : styles.iconInactive}`} />
                     Аналитика
-                </Link>
+                </Link> */}
             </nav>
 
-            <Link
-                to="/auth"
-                className={`${styles.authLink} ${location.pathname === '/auth' ? styles.navLinkActive : styles.navLinkInactive}`}
-            >
-                <AuthIcon className={`${styles.icon} ${location.pathname === '/auth' ? styles.iconActive : styles.iconInactive}`} />
-                Авторизация
-            </Link>
+            {isAuthenticated ? (
+                <button
+                    onClick={handleAuthClick}
+                    className={`${styles.authLink} ${styles.navLinkInactive}`}
+                >
+                    <AuthIcon className={`${styles.icon} ${styles.iconInactive}`} />
+                    {user?.name || 'Пользователь'}
+                </button>
+            ) : (
+                <Link
+                    to="/auth"
+                    className={`${styles.authLink} ${location.pathname === '/auth' ? styles.navLinkActive : styles.navLinkInactive}`}
+                >
+                    <AuthIcon className={`${styles.icon} ${location.pathname === '/auth' ? styles.iconActive : styles.iconInactive}`} />
+                    Авторизация
+                </Link>
+            )}
         </header>
-    )
+    );
 }
