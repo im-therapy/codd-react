@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ReactComponent as HomeIcon } from '../../assets/icons/home.svg';
 import { ReactComponent as NewsIcon } from '../../assets/icons/news.svg';
@@ -6,13 +7,24 @@ import { ReactComponent as MapIcon } from '../../assets/icons/map.svg';
 import { ReactComponent as AuthIcon } from '../../assets/icons/auth.svg';
 import styles from '../../styles/modules/Header.module.css';
 
-// Компонент шапки сайта с навигацией
 export default function Header() {
-    // Получаем текущий маршрут для подсветки активной страницы
     const location = useLocation();
+    const [isVisible, setIsVisible] = useState(false);
+    
+    useEffect(() => {
+        const handleScroll = () => {
+            const scrollY = window.scrollY;
+            setIsVisible(scrollY > 100);
+        };
+        
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    const isAuthPage = location.pathname === '/auth';
 
     return (
-        <header className={styles.header}>
+        <header className={`${styles.header} ${isAuthPage || isVisible ? styles.headerVisible : styles.headerHidden}`}>
             <Link to="/" className={styles.logo}>
                 <span className={styles.logoAccent}>ЦОДД</span> Смоленской области
             </Link>

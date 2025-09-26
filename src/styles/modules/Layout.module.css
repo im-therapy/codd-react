@@ -1,8 +1,7 @@
 .rootLayout {
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100vh;
 }
 
 .main {
-    height: 100%;
+    min-height: 100%;
 }

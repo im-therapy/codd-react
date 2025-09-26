@@ -1,0 +1,344 @@
+.container {
+    position: relative;
+    width: 100vw;
+    height: 138.64vh;
+    background: var(--color-black);
+    font-family: 'Manrope', sans-serif;
+    overflow-x: hidden;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+
+
+.authForm {
+    position: absolute;
+    width: 46.53vw;
+    left: 26.74vw;
+    top: 30.25vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2.47vh;
+}
+
+.title {
+    width: 100%;
+    font-weight: 600;
+    font-size: 5.19vh;
+    line-height: 5.8vh;
+    text-align: center;
+    color: var(--color-white);
+    margin: 0;
+}
+
+.toggleButtons {
+    position: absolute;
+    width: 22.57vw;
+    height: 7.28vh;
+    left: 38.75vw;
+    top: 13.09vh;
+    display: flex;
+    align-items: center;
+    padding: 0.99vh;
+    gap: 0.74vh;
+    background: var(--color-black-plus);
+    border-radius: 20px;
+}
+
+.toggleButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1.48vh 1.11vw;
+    gap: 0.99vh;
+    width: 50%;
+    height: 5.31vh;
+    border: none;
+    border-radius: 14px;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 600;
+    font-size: 0.97vw;
+    line-height: 2.35vh;
+    cursor: pointer;
+}
+
+.toggleButtonActive {
+    background: var(--color-white);
+    color: var(--color-black);
+}
+
+.toggleButtonInactive {
+    background: var(--color-black-plus);
+    color: var(--color-white);
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.99vh;
+    width: 22.57vw;
+}
+
+.input {
+    display: flex;
+    align-items: center;
+    padding: 0.83vw;
+    gap: 0.56vw;
+    width: 100%;
+    height: 5.43vh;
+    border: 2px solid var(--color-black-plus);
+    border-radius: 12px;
+    background: transparent;
+    color: var(--color-gray);
+    font-family: 'Manrope', sans-serif;
+    font-weight: 500;
+    font-size: 0.97vw;
+    line-height: 2.35vh;
+    box-sizing: border-box;
+}
+
+.input:focus {
+    outline: none;
+    border-color: var(--color-white);
+}
+
+.inputIcon {
+    width: 1.39vw;
+    height: 1.39vw;
+    color: var(--color-gray);
+}
+
+.submitGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.99vh;
+    width: 22.64vw;
+}
+
+.submitButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.83vw 1.11vw;
+    gap: 0.56vw;
+    width: 100%;
+    height: 5.31vh;
+    background: var(--color-black-plus);
+    border: none;
+    border-radius: 14px;
+    color: var(--color-white);
+    font-family: 'Manrope', sans-serif;
+    font-weight: 600;
+    font-size: 0.97vw;
+    line-height: 2.35vh;
+    cursor: pointer;
+}
+
+.submitButton:hover {
+    background: var(--color-green);
+}
+
+.disclaimer {
+    font-weight: 500;
+    font-size: 0.69vw;
+    line-height: 1.73vh;
+    color: var(--color-gray);
+    text-align: center;
+}
+
+.agreementLink {
+    color: var(--color-white);
+    text-decoration: none;
+}
+
+.agreementLink:hover {
+    text-decoration: underline;
+}
+
+.passwordErrors {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5vh;
+    margin-top: -0.5vh;
+}
+
+.passwordError {
+    font-size: 0.69vw;
+    color: #ff4444;
+    font-weight: 500;
+}
+
+.footer {
+    position: absolute;
+    width: calc(100vw - 32px);
+    height: 38.64vh;
+    left: 1.11vw;
+    top: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 4.44vh 1.67vw;
+    gap: 4.94vh;
+    border-top: 2px solid var(--color-black-plus);
+}
+
+.footerContent {
+    display: flex;
+    gap: 1.39vw;
+    width: 94.44vw;
+    height: 22.47vh;
+}
+
+.footerSection {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.98vh;
+}
+
+.footerSection:first-child {
+    width: 22.57vw;
+    height: 17.78vh;
+}
+
+.footerSection:nth-child(2) {
+    width: 22.57vw;
+    height: 22.47vh;
+}
+
+.footerTitle {
+    font-weight: 600;
+    font-size: 2.22vw;
+    line-height: 4.44vh;
+    color: var(--color-white);
+    margin: 0;
+}
+
+.footerText {
+    font-weight: 500;
+    font-size: 0.97vw;
+    line-height: 2.35vh;
+    color: var(--color-gray);
+}
+
+.footerLink {
+    font-weight: 600;
+    font-size: 0.97vw;
+    line-height: 2.35vh;
+    color: var(--color-white);
+    text-decoration: none;
+}
+
+.newsletter {
+    width: 46.53vw;
+    height: 18.15vh;
+}
+
+.newsletterInput {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 1.67vw;
+    gap: 0.83vw;
+    width: 100%;
+    height: 9.01vh;
+    border: 4px solid var(--color-black-plus);
+    border-radius: 24px;
+    box-sizing: border-box;
+}
+
+.emailPrefix {
+    color: var(--color-gray);
+    font-size: 1.25vw;
+    font-weight: 500;
+}
+
+.newsletterEmailInput {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--color-gray);
+    flex: 1;
+    font-size: 1.25vw;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 500;
+}
+
+.newsletterButton {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    padding: 1.67vw;
+    gap: 0.83vw;
+    width: 13.96vw;
+    height: 9.01vh;
+    background: var(--color-black-plus);
+    border: none;
+    border-radius: 24px;
+    color: var(--color-white);
+    font-family: 'Manrope', sans-serif;
+    font-weight: 600;
+    font-size: 1.25vw;
+    line-height: 3.09vh;
+    cursor: pointer;
+}
+
+.rightIcon {
+    width: 1.39vw;
+    height: 1.39vw;
+    color: var(--color-white);
+}
+
+.copyright {
+    width: 22.57vw;
+    height: 2.35vh;
+    font-weight: 600;
+    font-size: 0.97vw;
+    line-height: 2.35vh;
+    color: var(--color-gray);
+}
+
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        height: auto;
+        padding: 1rem;
+    }
+    
+    .nav {
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+    
+    .authForm {
+        position: static;
+        width: 90%;
+        margin: 2rem auto;
+    }
+    
+    .toggleButtons {
+        position: static;
+        width: 100%;
+        margin: 1rem 0;
+    }
+    
+    .inputGroup,
+    .submitGroup {
+        width: 100%;
+    }
+    
+    .footer {
+        position: static;
+        margin-top: 2rem;
+    }
+    
+    .footerContent {
+        flex-direction: column;
+        gap: 2rem;
+    }
+}
