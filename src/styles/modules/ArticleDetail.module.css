@@ -131,6 +131,21 @@
     font-size: 0.97vw;
     color: #C21F1F;
     cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.likeBtn:hover {
+    background: rgba(194, 31, 31, 0.35);
+}
+
+.likeBtn.liked {
+    background: #C21F1F;
+    color: #FFFFFF;
+}
+
+.likeBtn.liked .heartIcon {
+    fill: #FFFFFF;
+    color: #FFFFFF;
 }
 
 .heartIcon {

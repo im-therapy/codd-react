@@ -51,6 +51,9 @@ export const accidentsAPI = {
 export const articlesAPI = {
   getAll: () => api.get('/articles'),
   getById: (id) => api.get(`/articles/${id}`),
+  likeArticle: (id) => api.post(`/articles/${id}/like`),
+  unlikeArticle: (id) => api.delete(`/articles/${id}/like`),
+  checkLikeStatus: (id) => api.get(`/articles/${id}/like-status`),
 };
 
 export const newsletterAPI = {

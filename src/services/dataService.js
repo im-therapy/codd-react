@@ -73,3 +73,50 @@ export const subscribeNewsletter = async (email) => {
     const response = await newsletterAPI.subscribe(email);
     return response.data;
 };
+
+// Statistics
+export const getAccidentsCount = async () => {
+    if (USE_MOCK_DATA) {
+        return 12;
+    }
+    // В реальном API это может быть отдельный endpoint или часть статистики
+    const markers = await getMarkers();
+    return markers.filter(m => m.type === 'accident').length;
+};
+
+// Likes
+export const likeArticle = async (articleId) => {
+    if (USE_MOCK_DATA) {
+        const likedArticles = JSON.parse(localStorage.getItem('likedArticles') || '[]');
+        if (!likedArticles.includes(articleId)) {
+            likedArticles.push(articleId);
+            localStorage.setItem('likedArticles', JSON.stringify(likedArticles));
+        }
+        return { success: true, liked: true };
+    }
+    const response = await articlesAPI.likeArticle(articleId);
+    return response.data;
+};
+
+export const unlikeArticle = async (articleId) => {
+    if (USE_MOCK_DATA) {
+        const likedArticles = JSON.parse(localStorage.getItem('likedArticles') || '[]');
+        const index = likedArticles.indexOf(articleId);
+        if (index > -1) {
+            likedArticles.splice(index, 1);
+            localStorage.setItem('likedArticles', JSON.stringify(likedArticles));
+        }
+        return { success: true, liked: false };
+    }
+    const response = await articlesAPI.unlikeArticle(articleId);
+    return response.data;
+};
+
+export const checkLikeStatus = async (articleId) => {
+    if (USE_MOCK_DATA) {
+        const likedArticles = JSON.parse(localStorage.getItem('likedArticles') || '[]');
+        return { liked: likedArticles.includes(articleId) };
+    }
+    const response = await articlesAPI.checkLikeStatus(articleId);
+    return response.data;
+};

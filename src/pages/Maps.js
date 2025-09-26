@@ -6,7 +6,7 @@ import { ReactComponent as FalseIcon } from '../assets/icons/false.svg';
 import { ReactComponent as SettingsIcon } from '../assets/icons/setts.svg';
 import SettingsPanel from '../components/SettingsPanel';
 import AccidentPanel from '../components/AccidentPanel';
-import { getMarkers, getAccidentById } from '../services/dataService';
+import { getMarkers, getAccidentById, getAccidentsCount } from '../services/dataService';
 import styles from '../styles/modules/Maps.module.css';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
@@ -18,20 +18,24 @@ export default function Maps() {
     });
     const [markers, setMarkers] = useState([]);
     const [accidentData, setAccidentData] = useState(null);
-    const [accidentsCount] = useState(12);
+    const [accidentsCount, setAccidentsCount] = useState(0);
     const [isSettingsVisible, setIsSettingsVisible] = useState(false);
     const [selectedMarker, setSelectedMarker] = useState(null);
 
     useEffect(() => {
-        const loadMarkers = async () => {
+        const loadData = async () => {
             try {
-                const data = await getMarkers();
-                setMarkers(data);
+                const [markersData, accidentsCountData] = await Promise.all([
+                    getMarkers(),
+                    getAccidentsCount()
+                ]);
+                setMarkers(markersData);
+                setAccidentsCount(accidentsCountData);
             } catch (error) {
-                console.error('Ошибка загрузки маркеров:', error);
+                console.error('Ошибка загрузки данных:', error);
             }
         };
-        loadMarkers();
+        loadData();
     }, []);
 
     const fetchAccidentData = async (markerId) => {
