@@ -6,7 +6,8 @@ import { ReactComponent as FalseIcon } from '../assets/icons/false.svg';
 import { ReactComponent as SettingsIcon } from '../assets/icons/setts.svg';
 import SettingsPanel from '../components/SettingsPanel';
 import AccidentPanel from '../components/AccidentPanel';
-import { getMarkers, getAccidentById, getAccidentsCount } from '../services/dataService';
+import TrafficLightPanel from '../components/TrafficLightPanel';
+import { getTrafficLights, getAccidents } from '../services/dataService';
 import styles from '../styles/modules/Maps.module.css';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
@@ -18,6 +19,7 @@ export default function Maps() {
     });
     const [markers, setMarkers] = useState([]);
     const [accidentData, setAccidentData] = useState(null);
+    const [trafficLightData, setTrafficLightData] = useState(null);
     const [accidentsCount, setAccidentsCount] = useState(0);
     const [isSettingsVisible, setIsSettingsVisible] = useState(false);
     const [selectedMarker, setSelectedMarker] = useState(null);
@@ -25,12 +27,12 @@ export default function Maps() {
     useEffect(() => {
         const loadData = async () => {
             try {
-                const [markersData, accidentsCountData] = await Promise.all([
-                    getMarkers(),
-                    getAccidentsCount()
+                const [markersData, accidentsData] = await Promise.all([
+                    getTrafficLights(),
+                    getAccidents()
                 ]);
                 setMarkers(markersData);
-                setAccidentsCount(accidentsCountData);
+                setAccidentsCount(accidentsData.length);
             } catch (error) {
                 console.error('Ошибка загрузки данных:', error);
             }
@@ -38,14 +40,7 @@ export default function Maps() {
         loadData();
     }, []);
 
-    const fetchAccidentData = async (markerId) => {
-        try {
-            return await getAccidentById(markerId);
-        } catch (error) {
-            console.error('Ошибка загрузки данных аварии:', error);
-            return null;
-        }
-    };
+
 
     const mapStyle = {
         version: 8,
@@ -78,8 +73,9 @@ export default function Maps() {
                         onClick={async () => {
                             setSelectedMarker(marker);
                             if (marker.type === 'accident') {
-                                const data = await fetchAccidentData(marker.id);
-                                setAccidentData(data);
+                                setAccidentData(marker);
+                            } else if (marker.type === 'traffic_light') {
+                                setTrafficLightData(marker);
                             }
                         }}
                     >
@@ -102,32 +98,23 @@ export default function Maps() {
                 </span>
             </div>
             <SettingsPanel isOpen={isSettingsVisible} onClose={() => setIsSettingsVisible(false)} />
-            {selectedMarker && (
-                <div 
-                    style={{
-                        position: 'fixed',
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        background: 'rgba(0,0,0,0.5)',
-                        zIndex: 9999
-                    }}
-                    onClick={() => {
+            {accidentData && (
+                <AccidentPanel
+                    accident={accidentData}
+                    onClose={() => {
                         setSelectedMarker(null);
                         setAccidentData(null);
                     }}
-                >
-                    <div onClick={(e) => e.stopPropagation()}>
-                        <AccidentPanel
-                            accident={accidentData}
-                            onClose={() => {
-                                setSelectedMarker(null);
-                                setAccidentData(null);
-                            }}
-                        />
-                    </div>
-                </div>
+                />
+            )}
+            {trafficLightData && (
+                <TrafficLightPanel
+                    trafficLight={trafficLightData}
+                    onClose={() => {
+                        setSelectedMarker(null);
+                        setTrafficLightData(null);
+                    }}
+                />
             )}
             <button onClick={() => setIsSettingsVisible(true)} className={`${styles.card} ${styles.settingsCard}`}>
                 <SettingsIcon className={`${styles.icon} ${isSettingsVisible ? styles.iconActive : styles.iconGray}`} />

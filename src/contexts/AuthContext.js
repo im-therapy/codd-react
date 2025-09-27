@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { loginUser, registerUser } from '../services/dataService';
+import { authAPI } from '../services/api';
 
 const AuthContext = createContext();
 
@@ -7,19 +7,26 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    const login = async (email, password) => {
-        const data = await loginUser(email, password);
-        const { success, token, user: userData } = data;
-        
-        if (success) {
+    const login = async (login, password) => {
+        try {
+            const response = await authAPI.login(login, password);
+            const { token, user: userData } = response.data;
+            
             localStorage.setItem('token', token);
             setUser(userData);
+            return { success: true, user: userData };
+        } catch (error) {
+            return { success: false, error: error.response?.data?.message || 'Ошибка авторизации' };
         }
-        return data;
     };
 
-    const register = async (firstName, lastName, email, password) => {
-        return await registerUser(firstName, lastName, email, password);
+    const register = async (login, password, role = 'viewer') => {
+        try {
+            const response = await authAPI.register(login, password, role);
+            return { success: true, data: response.data };
+        } catch (error) {
+            return { success: false, error: error.response?.data?.message || 'Ошибка регистрации' };
+        }
     };
 
     const logout = () => {

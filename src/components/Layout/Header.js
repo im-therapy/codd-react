@@ -64,6 +64,7 @@ export default function Header() {
                     <AnalIcon className={`${styles.icon} ${location.pathname === '/analytics' ? styles.iconActive : styles.iconInactive}`} />
                     Аналитика
                 </Link>
+
             </nav>
 
             {isAuthenticated ? (

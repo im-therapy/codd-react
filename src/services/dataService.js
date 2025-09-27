@@ -1,162 +1,184 @@
 import { USE_MOCK_DATA } from '../constants/config';
 import { mockArticles } from '../data/mockArticles';
-import { mockMarkers, mockAccidents } from '../data/mockMarkers';
-import { articlesAPI, markersAPI, accidentsAPI, authAPI, newsletterAPI, statisticsAPI } from './api';
+import { mockMarkers } from '../data/mockMarkers';
+import { authAPI, newsAPI, trafficLightsAPI, accidentsAPI, finesAPI, evacuationsAPI, documentsAPI } from './api';
+import { checkServerHealth } from './apiHealthCheck';
 
-// Articles
-export const getArticles = async () => {
-    if (USE_MOCK_DATA) {
-        await new Promise(resolve => setTimeout(resolve, 500));
-        return mockArticles;
-    }
-    const response = await articlesAPI.getAll();
+// Функции для работы с новостями
+export const getNews = async () => {
+  if (USE_MOCK_DATA || !(await checkServerHealth())) {
+    return mockArticles;
+  }
+  
+  try {
+    const response = await newsAPI.getAll();
     return response.data;
+  } catch (error) {
+    console.error('Ошибка при получении новостей:', error);
+    return mockArticles;
+  }
 };
 
-export const getArticleById = async (id) => {
-    if (USE_MOCK_DATA) {
-        return mockArticles.find(a => a.id === parseInt(id));
-    }
-    const response = await articlesAPI.getById(id);
+export const getNewsById = async (id) => {
+  if (USE_MOCK_DATA) {
+    return mockArticles.find(article => article.id === parseInt(id));
+  }
+  
+  try {
+    const response = await newsAPI.getById(id);
     return response.data;
+  } catch (error) {
+    console.error('Ошибка при получении новости:', error);
+    return null;
+  }
 };
 
-// Map markers
-export const getMarkers = async () => {
-    if (USE_MOCK_DATA) {
-        return mockMarkers;
-    }
-    const response = await markersAPI.getAll();
+export const createNews = async (newsData) => {
+  try {
+    const response = await newsAPI.create(newsData);
+    return { success: true, data: response.data };
+  } catch (error) {
+    return { success: false, error: error.response?.data?.message };
+  }
+};
+
+// Функции для работы со светофорами
+export const getTrafficLights = async () => {
+  if (USE_MOCK_DATA || !(await checkServerHealth())) {
+    return mockMarkers;
+  }
+  
+  try {
+    const response = await trafficLightsAPI.getAll();
     return response.data;
+  } catch (error) {
+    console.error('Ошибка при получении светофоров:', error);
+    return mockMarkers;
+  }
 };
 
-export const getAccidentById = async (id) => {
-    if (USE_MOCK_DATA) {
-        return mockAccidents[id] || null;
-    }
-    const response = await accidentsAPI.getById(id);
+export const createTrafficLight = async (data) => {
+  try {
+    const response = await trafficLightsAPI.create(data);
+    return { success: true, data: response.data };
+  } catch (error) {
+    return { success: false, error: error.response?.data?.message };
+  }
+};
+
+// Функции для работы с происшествиями
+export const getAccidents = async () => {
+  try {
+    const response = await accidentsAPI.getAll();
     return response.data;
-};
-
-// Auth
-export const loginUser = async (email, password) => {
-    if (USE_MOCK_DATA) {
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        return {
-            success: true,
-            token: 'mock-jwt-token',
-            user: { id: 1, email, name: 'Test User' }
-        };
-    }
-    const response = await authAPI.login(email, password);
-    return response.data;
-};
-
-export const registerUser = async (firstName, lastName, email, password) => {
-    if (USE_MOCK_DATA) {
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        return {
-            success: true,
-            message: 'Письмо с подтверждением отправлено на email'
-        };
-    }
-    const response = await authAPI.register(firstName, lastName, email, password);
-    return response.data;
-};
-
-// Newsletter
-export const subscribeNewsletter = async (email) => {
-    if (USE_MOCK_DATA) {
-        await new Promise(resolve => setTimeout(resolve, 500));
-        return { success: true, message: 'Подписка оформлена!' };
-    }
-    const response = await newsletterAPI.subscribe(email);
-    return response.data;
-};
-
-// Statistics
-export const getAccidentsCount = async () => {
-    if (USE_MOCK_DATA) {
-        return 12;
-    }
-    // В реальном API это может быть отдельный endpoint или часть статистики
-    const markers = await getMarkers();
-    return markers.filter(m => m.type === 'accident').length;
-};
-
-export const getAccidentStatistics = async (startDate, endDate) => {
-    if (USE_MOCK_DATA) {
-        return {
-            total: 798,
-            withInjuries: 686,
-            fatal: 112,
-            monthlyData: [
-                { month: 'Янв', accidents: 100, fatal: 40 },
-                { month: 'Фев', accidents: 70, fatal: 53 },
-                { month: 'Мар', accidents: 66, fatal: 43 },
-                { month: 'Апр', accidents: 69, fatal: 31 },
-                { month: 'Май', accidents: 76, fatal: 14 },
-                { month: 'Июн', accidents: 78, fatal: 10 },
-                { month: 'Июл', accidents: 83, fatal: 17 },
-                { month: 'Авг', accidents: 87, fatal: 22 },
-                { month: 'Сен', accidents: 95, fatal: 25 },
-                { month: 'Окт', accidents: 77, fatal: 17 },
-                { month: 'Ноя', accidents: 53, fatal: 13 },
-                { month: 'Дек', accidents: 46, fatal: 11 }
-            ]
-        };
-    }
-    // API запрос
-    return {};
-};
-
-export const getDangerousStreets = async () => {
-    if (USE_MOCK_DATA) {
-        return [
-            { name: 'Пятницкая улица', accidents: 257, fatal: 131 },
-            { name: 'Коварный перекресток', accidents: 253, fatal: 43 },
-            { name: 'Переулок разочарования', accidents: 177, fatal: 59 },
-            { name: 'Проспект Победы', accidents: 128, fatal: 57 },
-            { name: 'Улица Кирова', accidents: 63, fatal: 26 }
-        ];
-    }
-    // API запрос
+  } catch (error) {
+    console.error('Ошибка при получении происшествий:', error);
     return [];
+  }
 };
 
-// Likes
-export const likeArticle = async (articleId) => {
-    if (USE_MOCK_DATA) {
-        const likedArticles = JSON.parse(localStorage.getItem('likedArticles') || '[]');
-        if (!likedArticles.includes(articleId)) {
-            likedArticles.push(articleId);
-            localStorage.setItem('likedArticles', JSON.stringify(likedArticles));
-        }
-        return { success: true, liked: true };
-    }
-    const response = await articlesAPI.likeArticle(articleId);
+// Функции для работы со штрафами
+export const getFines = async () => {
+  try {
+    const response = await finesAPI.getAll();
     return response.data;
+  } catch (error) {
+    console.error('Ошибка при получении штрафов:', error);
+    return [];
+  }
 };
 
-export const unlikeArticle = async (articleId) => {
-    if (USE_MOCK_DATA) {
-        const likedArticles = JSON.parse(localStorage.getItem('likedArticles') || '[]');
-        const index = likedArticles.indexOf(articleId);
-        if (index > -1) {
-            likedArticles.splice(index, 1);
-            localStorage.setItem('likedArticles', JSON.stringify(likedArticles));
-        }
-        return { success: true, liked: false };
-    }
-    const response = await articlesAPI.unlikeArticle(articleId);
+// Функции для работы с эвакуациями
+export const getEvacuations = async () => {
+  try {
+    const response = await evacuationsAPI.getAll();
     return response.data;
+  } catch (error) {
+    console.error('Ошибка при получении эвакуаций:', error);
+    return [];
+  }
 };
 
-export const checkLikeStatus = async (articleId) => {
-    if (USE_MOCK_DATA) {
-        const likedArticles = JSON.parse(localStorage.getItem('likedArticles') || '[]');
-        return { liked: likedArticles.includes(articleId) };
-    }
-    const response = await articlesAPI.checkLikeStatus(articleId);
+// Функции для работы с документами
+export const getDocuments = async () => {
+  try {
+    const response = await documentsAPI.getAll();
     return response.data;
+  } catch (error) {
+    console.error('Ошибка при получении документов:', error);
+    return [];
+  }
 };
+
+export const uploadDocument = async (file, title, description) => {
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('title', title);
+    formData.append('description', description);
+    const response = await documentsAPI.upload(formData);
+    return { success: true, data: response.data };
+  } catch (error) {
+    return { success: false, error: error.response?.data?.message };
+  }
+};
+
+// Совместимость со старыми функциями
+export const getArticles = getNews;
+export const getArticleById = getNewsById;
+export const getMarkers = getTrafficLights;
+
+// Функции авторизации (для совместимости)
+export const loginUser = async (login, password) => {
+  if (USE_MOCK_DATA || !(await checkServerHealth())) {
+    if (login === 'admin' && password === 'admin123') {
+      return {
+        success: true,
+        token: 'mock-jwt-token',
+        user: { id: 1, login, role: 'admin', name: 'Администратор' }
+      };
+    }
+    return { success: false, error: 'Неверные учетные данные' };
+  }
+  
+  try {
+    const response = await authAPI.login(login, password);
+    return { success: true, ...response.data };
+  } catch (error) {
+    return { success: false, error: error.response?.data?.message || 'Ошибка авторизации' };
+  }
+};
+
+export const registerUser = async (login, password, role = 'viewer') => {
+  if (USE_MOCK_DATA || !(await checkServerHealth())) {
+    console.log('📝 Мок регистрация:', { login, password, role });
+    return { success: true, message: 'Пользователь успешно зарегистрирован (мок)' };
+  }
+  
+  try {
+    console.log('📝 Отправка регистрации на сервер:', { login, password, role });
+    const response = await authAPI.register(login, password, role);
+    return { success: true, data: response.data };
+  } catch (error) {
+    console.error('❌ Ошибка регистрации:', error);
+    return { success: false, error: error.response?.data?.message || 'Ошибка регистрации' };
+  }
+};
+
+// Недостающие функции для совместимости
+export const subscribeNewsletter = async (email) => {
+  return { success: true, message: 'Подписка оформлена!' };
+};
+
+export const likeArticle = async (id) => {
+  return { success: true };
+};
+
+export const unlikeArticle = async (id) => {
+  return { success: true };
+};
+
+export const checkLikeStatus = async (id) => {
+  return { liked: false };
+};
+

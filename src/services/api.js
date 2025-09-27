@@ -1,6 +1,6 @@
 import axios from 'axios';
-
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+import { API_BASE_URL } from '../constants/config';
+import { API_ENDPOINTS } from '../constants/apiEndpoints';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -29,64 +29,55 @@ api.interceptors.response.use(
 );
 
 export const authAPI = {
-  register: (firstName, lastName, email, password) =>
-    api.post('/auth/register', { firstName, lastName, email, password }),
+  register: (login, password, role = 'viewer') =>
+    api.post(API_ENDPOINTS.AUTH.REGISTER, { login, password, role }),
 
-  login: (email, password) =>
-    api.post('/auth/login', { email, password }),
-};
+  login: (login, password) =>
+    api.post(API_ENDPOINTS.AUTH.LOGIN, { login, password }),
 
-export const markersAPI = {
-  getAll: () => api.get('/markers'),
-};
-
-export const accidentsAPI = {
-  getById: (id) => api.get(`/accidents/${id}`),
-  uploadPhoto: (id, formData) =>
-    api.post(`/accidents/${id}/photo`, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    }),
-};
-
-export const articlesAPI = {
-  getAll: () => api.get('/articles'),
-  getById: (id) => api.get(`/articles/${id}`),
-  likeArticle: (id) => api.post(`/articles/${id}/like`),
-  unlikeArticle: (id) => api.delete(`/articles/${id}/like`),
-  checkLikeStatus: (id) => api.get(`/articles/${id}/like-status`),
-};
-
-export const newsletterAPI = {
-  subscribe: (email) => api.post('/newsletter', { email }),
-};
-
-export const statisticsAPI = {
-  getFines: (startDate, endDate) =>
-    api.get('/statistics/fines', { params: { startDate, endDate } }),
-
-  getEvacuations: (startDate, endDate) =>
-    api.get('/statistics/evacuations', { params: { startDate, endDate } }),
-
-  getAccidents: (startDate, endDate) =>
-    api.get('/statistics/accidents', { params: { startDate, endDate } }),
+  getUser: (userId) => api.get(API_ENDPOINTS.AUTH.GET_USER(userId)),
 };
 
 export const trafficLightsAPI = {
-  getAll: () => api.get('/traffic-lights'),
+  getAll: () => api.get(API_ENDPOINTS.TRAFFIC_LIGHTS.GET_ALL),
+  create: (data) => api.post(API_ENDPOINTS.TRAFFIC_LIGHTS.CREATE, data),
 };
 
-export const adminAPI = {
-  importData: (formData, dataType) =>
-    api.post('/admin/import', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-      params: { data_type: dataType }
-    }),
-
-  exportData: (type, format) =>
-    api.get(`/admin/export/${type}`, {
-      params: { format },
-      responseType: 'blob'
-    }),
+export const accidentsAPI = {
+  getAll: () => api.get(API_ENDPOINTS.ACCIDENTS.GET_ALL),
+  getById: (id) => api.get(API_ENDPOINTS.ACCIDENTS.GET_BY_ID(id)),
 };
+
+export const newsAPI = {
+  getAll: () => api.get(API_ENDPOINTS.NEWS.GET_ALL),
+  getById: (id) => api.get(API_ENDPOINTS.NEWS.GET_BY_ID(id)),
+  create: (data) => api.post(API_ENDPOINTS.NEWS.CREATE, data),
+};
+
+export const finesAPI = {
+  getAll: () => api.get(API_ENDPOINTS.FINES.GET_ALL),
+  getById: (id) => api.get(API_ENDPOINTS.FINES.GET_BY_ID(id)),
+};
+
+export const evacuationsAPI = {
+  getAll: () => api.get(API_ENDPOINTS.EVACUATIONS.GET_ALL),
+  getById: (id) => api.get(API_ENDPOINTS.EVACUATIONS.GET_BY_ID(id)),
+};
+
+export const documentsAPI = {
+  getAll: () => api.get(API_ENDPOINTS.DOCUMENTS.GET_ALL),
+  upload: (formData) => api.post(API_ENDPOINTS.DOCUMENTS.UPLOAD, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  }),
+};
+
+// Статистика API (для будущего использования)
+export const statisticsAPI = {
+  getAccidents: (params) => api.get(API_ENDPOINTS.STATISTICS.ACCIDENTS, { params }),
+  getDangerousStreets: (params) => api.get(API_ENDPOINTS.STATISTICS.DANGEROUS_STREETS, { params }),
+  getFines: (params) => api.get(API_ENDPOINTS.STATISTICS.FINES, { params }),
+  getEvacuations: (params) => api.get(API_ENDPOINTS.STATISTICS.EVACUATIONS, { params }),
+};
+
 
 export default api;

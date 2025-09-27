@@ -1,12 +1,15 @@
 import React from 'react';
 import { ReactComponent as UploadIcon } from '../assets/icons/upload.svg';
+import { ReactComponent as CloseIcon } from '../assets/icons/close.svg';
 import '../styles/modules/AccidentPanel.css';
 
 const AccidentPanel = ({ accident, onClose }) => {
   const { photo, longitude, latitude, date, time } = accident || {};
 
   return (
-    <div className="accident-panel">
+    <>
+      <div className="accident-overlay" onClick={onClose}></div>
+      <div className="accident-panel">
       <div className="accident-content">
         <div className="accident-header">
           <div className="accident-icon">
@@ -64,12 +67,11 @@ const AccidentPanel = ({ accident, onClose }) => {
       </div>
 
       <button className="close-button" onClick={onClose}>
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-          <path d="M15 5L5 15M5 5L15 15" stroke="white" strokeWidth="1.67"/>
-        </svg>
+        <CloseIcon />
         Закрыть
       </button>
-    </div>
+      </div>
+    </>
   );
 };
 

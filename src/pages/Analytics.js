@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { getAccidentStatistics, getDangerousStreets } from '../services/dataService';
+import { USE_MOCK_DATA } from '../constants/config';
 import { statisticsAPI } from '../services/api';
 import './Analytics.css';
 
 const Analytics = () => {
-  const [useMockData, setUseMockData] = useState(true);
-  const [accidentStats, setAccidentStats] = useState(null);
-  const [dangerousStreets, setDangerousStreets] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const mockMonthlyData = [
@@ -34,25 +31,20 @@ const Analytics = () => {
 
   useEffect(() => {
     loadData();
-  }, [useMockData]);
+  }, []);
 
   const loadData = async () => {
     setLoading(true);
     try {
-      if (useMockData) {
-        const [statsData, streetsData] = await Promise.all([
-          getAccidentStatistics(),
-          getDangerousStreets()
-        ]);
-        setAccidentStats(statsData);
-        setDangerousStreets(streetsData);
-      } else {
+      if (!USE_MOCK_DATA) {
+        // Загружаем данные с сервера
         const [statsResponse, streetsResponse] = await Promise.all([
-          statisticsAPI.getAccidents('2024-01-01', '2024-12-31'),
-          statisticsAPI.getDangerousStreets()
+          statisticsAPI.getAccidents({ year: 2024 }),
+          statisticsAPI.getDangerousStreets({ limit: 5 })
         ]);
-        setAccidentStats(statsResponse.data);
-        setDangerousStreets(streetsResponse.data);
+        // TODO: Обработать реальные данные
+        console.log('Статистика:', statsResponse.data);
+        console.log('Опасные улицы:', streetsResponse.data);
       }
     } catch (error) {
       console.error('Ошибка загрузки данных:', error);
@@ -65,27 +57,18 @@ const Analytics = () => {
     return <div className="analytics"><div className="loading">Загрузка...</div></div>;
   }
 
-  const monthlyData = useMockData ? mockMonthlyData : (accidentStats?.monthlyData || []);
-  const streetData = useMockData ? mockStreetData : dangerousStreets;
-  const totalAccidents = useMockData ? 798 : (accidentStats?.total || 0);
-  const totalWithInjuries = useMockData ? 686 : (accidentStats?.withInjuries || 0);
-  const totalFatal = useMockData ? 112 : (accidentStats?.fatal || 0);
+  // Моковые данные для разработки
+  const monthlyData = USE_MOCK_DATA ? mockMonthlyData : [];
+  const streetData = USE_MOCK_DATA ? mockStreetData : [];
+  const totalAccidents = USE_MOCK_DATA ? 798 : 0;
+  const totalWithInjuries = USE_MOCK_DATA ? 686 : 0;
+  const totalFatal = USE_MOCK_DATA ? 112 : 0;
   const streetTotal = streetData.reduce((sum, street) => sum + street.accidents, 0);
   const streetFatalTotal = streetData.reduce((sum, street) => sum + street.fatal, 0);
   return (
     <div className="analytics">
       <div className="analytics-header">
         <h1>Аналитика</h1>
-        <div className="data-toggle">
-          <label>
-            <input 
-              type="checkbox" 
-              checked={useMockData} 
-              onChange={(e) => setUseMockData(e.target.checked)}
-            />
-            Использовать моковые данные
-          </label>
-        </div>
       </div>
       
 
@@ -95,8 +78,10 @@ const Analytics = () => {
           <div className="chart-header">
             <h3>Статистика ДТП по месяцам</h3>
             <div className="period-buttons">
-              <button className="active">Год</button>
               <button>Месяц</button>
+              <button>Полгода</button>
+              <button className="active">Год</button>
+              <button>5 лет</button>
             </div>
           </div>
           
@@ -146,8 +131,10 @@ const Analytics = () => {
           <div className="chart-header">
             <h3>Опасные улицы</h3>
             <div className="period-buttons">
-              <button>День</button>
-              <button className="active">Неделя</button>
+              <button>Месяц</button>
+              <button>Полгода</button>
+              <button className="active">Год</button>
+              <button>5 лет</button>
             </div>
           </div>
           

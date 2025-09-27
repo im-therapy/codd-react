@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getArticles } from '../services/dataService';
+import { getNews } from '../services/dataService';
 
 export const useArticles = () => {
     const [articles, setArticles] = useState([]);
@@ -9,7 +9,7 @@ export const useArticles = () => {
     useEffect(() => {
         const loadArticles = async () => {
             try {
-                const data = await getArticles();
+                const data = await getNews();
                 setArticles(data);
             } catch (error) {
                 setError('Ошибка загрузки статей');

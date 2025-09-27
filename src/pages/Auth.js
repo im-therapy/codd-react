@@ -30,7 +30,7 @@ export default function Auth() {
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
-        email: '',
+        login: '',
         password: ''
     });
     const [passwordErrors, setPasswordErrors] = useState([]);
@@ -54,7 +54,7 @@ export default function Auth() {
     };
 
     const resetForm = () => {
-        setFormData({ firstName: '', lastName: '', email: '', password: '' });
+        setFormData({ firstName: '', lastName: '', login: '', password: '' });
         setPasswordErrors([]);
         setFormError('');
     };
@@ -85,17 +85,13 @@ export default function Auth() {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         
         if (isLogin) {
-            if (!formData.email || !formData.password) {
+            if (!formData.login || !formData.password) {
                 setFormError('Заполните все поля');
-                return;
-            }
-            if (!emailRegex.test(formData.email)) {
-                setFormError('Некорректная почта');
                 return;
             }
             
             setIsLoading(true);
-            login(formData.email, formData.password)
+            login(formData.login, formData.password)
                 .then(result => {
                     if (result.success) {
                         setUserName(result.user.name);
@@ -111,18 +107,13 @@ export default function Auth() {
             return;
         }
         
-        if (!formData.firstName || !formData.lastName || !formData.email || !formData.password) {
+        if (!formData.firstName || !formData.lastName || !formData.login || !formData.password) {
             setFormError('Заполните все поля');
             return;
         }
         
-        if (!emailRegex.test(formData.email)) {
-            setFormError('Некорректная почта');
-            return;
-        }
-        
         setIsLoading(true);
-        register(formData.firstName, formData.lastName, formData.email, formData.password)
+        register(formData.login, formData.password)
             .then(result => {
                 if (result.success) {
                     setIsRegistrationSuccess(true);
@@ -193,10 +184,10 @@ export default function Auth() {
                         <EmailIcon className={styles.inputIcon} />
                         <input
                             type="text"
-                            name="email"
-                            placeholder="Email"
+                            name="login"
+                            placeholder="Логин"
                             className={styles.input}
-                            value={formData.email}
+                            value={formData.login}
                             onChange={handleInputChange}
                         />
                     </div>
@@ -244,7 +235,7 @@ export default function Auth() {
                     onButtonClick={() => {
                         setIsRegistrationSuccess(false);
                         setIsLogin(true);
-                        setFormData({ firstName: '', lastName: '', email: '', password: '' });
+                        setFormData({ firstName: '', lastName: '', login: '', password: '' });
                     }}
                 />
             ) : (
