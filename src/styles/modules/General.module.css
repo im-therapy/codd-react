@@ -73,7 +73,7 @@
     gap: 0.56vw;
     background: var(--color-black-plus);
     border: none;
-    border-radius: 14px;
+    border-radius: 24px;
     color: var(--color-white);
     font-family: 'Manrope', sans-serif;
     font-weight: 600;
@@ -205,7 +205,7 @@
     width: calc(100vw - 32px);
     height: 38.64vh;
     left: 1.11vw;
-    top: 100vh;
+    top: 85vh;
     display: flex;
     flex-direction: column;
     padding: 4.44vh 1.67vw;

@@ -68,13 +68,13 @@ export default function Header() {
             </nav>
 
             {isAuthenticated ? (
-                <button
-                    onClick={handleAuthClick}
-                    className={`${styles.authLink} ${styles.navLinkInactive}`}
+                <Link
+                    to="/profile"
+                    className={`${styles.authLink} ${styles.navLinkActive}`}
                 >
-                    <AuthIcon className={`${styles.icon} ${styles.iconInactive}`} />
+                    <AuthIcon className={`${styles.icon} ${styles.iconActive}`} />
                     {user?.name || 'Пользователь'}
-                </button>
+                </Link>
             ) : (
                 <Link
                     to="/auth"

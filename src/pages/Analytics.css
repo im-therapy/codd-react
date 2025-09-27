@@ -135,25 +135,49 @@
 .period-buttons {
   display: flex;
   background: #1F2124;
-  border-radius: 12px;
-  padding: 6px;
-  gap: 6px;
+  border-radius: 16px;
+  padding: 8px;
+  gap: 8px;
+  position: relative;
+  height: 48px;
+}
+
+.period-buttons::before {
+  content: '';
+  position: absolute;
+  width: calc(25% - 6px);
+  height: 36px;
+  background: #FFFFFF;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+  z-index: 0;
+  left: 6px;
+  top: 6px;
+  transform: translateX(var(--slider-position, 0));
 }
 
 .period-buttons button {
-  background: #1F2124;
+  background: transparent;
   border: none;
   color: #FFFFFF;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 600;
-  padding: 6px 8px;
-  border-radius: 6px;
+  padding: 8px 12px;
+  border-radius: 8px;
   cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+  flex: 1;
 }
 
 .period-buttons button.active {
-  background: #FFFFFF;
   color: #0C0C0C;
+}
+
+.period-buttons button:hover:not(.active) {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
 }
 
 .chart-stats {
@@ -252,7 +276,8 @@
   border-radius: 10px 10px 0 0;
   z-index: 0;
   transform: translateY(4px);
-  animation: growUp 0.8s ease-out forwards;
+  height: var(--target-height);
+  transition: height 0.6s ease-in-out;
 }
 
 .bar.fatal {
@@ -261,17 +286,9 @@
   border-radius: 10px 10px 0 0;
   z-index: 1;
   box-sizing: border-box;
-  animation: growUp 0.8s ease-out forwards;
-  animation-delay: 0.1s;
-}
-
-@keyframes growUp {
-  from {
-    height: 0;
-  }
-  to {
-    height: var(--target-height);
-  }
+  height: var(--target-height);
+  transition: height 0.6s ease-in-out;
+  transition-delay: 0.1s;
 }
 
 .bar-group span {
@@ -320,7 +337,8 @@
   border-radius: 0 10px 10px 0;
   z-index: 0;
   transform: translateX(4px);
-  animation: growRight 0.8s ease-out forwards;
+  width: var(--target-width);
+  transition: width 0.6s ease-in-out;
 }
 
 .h-bar.fatal {
@@ -329,17 +347,9 @@
   border-radius: 0 10px 10px 0;
   z-index: 1;
   box-sizing: border-box;
-  animation: growRight 0.8s ease-out forwards;
-  animation-delay: 0.1s;
-}
-
-@keyframes growRight {
-  from {
-    width: 0;
-  }
-  to {
-    width: var(--target-width);
-  }
+  width: var(--target-width);
+  transition: width 0.6s ease-in-out;
+  transition-delay: 0.1s;
 }
 
 @media (max-width: 768px) {

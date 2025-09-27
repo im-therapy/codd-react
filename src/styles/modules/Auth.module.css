@@ -46,6 +46,19 @@ body {
     gap: 0.74vh;
     background: var(--color-black-plus);
     border-radius: 20px;
+    position: relative;
+}
+
+.toggleSlider {
+    position: absolute;
+    width: calc(50% - 0.37vh);
+    height: 5.31vh;
+    background: var(--color-white);
+    border-radius: 14px;
+    transition: transform 0.3s ease;
+    z-index: 0;
+    left: 0.99vh;
+    top: 0.99vh;
 }
 
 .toggleButton {
@@ -63,15 +76,17 @@ body {
     font-size: 0.97vw;
     line-height: 2.35vh;
     cursor: pointer;
+    background: transparent;
+    position: relative;
+    z-index: 1;
+    transition: color 0.3s ease;
 }
 
 .toggleButtonActive {
-    background: var(--color-white);
     color: var(--color-black);
 }
 
 .toggleButtonInactive {
-    background: var(--color-black-plus);
     color: var(--color-white);
 }
 

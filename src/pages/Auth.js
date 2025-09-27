@@ -132,6 +132,7 @@ export default function Auth() {
 
             {!isRegistrationSuccess && !isLoginSuccess && (
                 <div className={styles.toggleButtons}>
+                    <div className={styles.toggleSlider} style={{transform: `translateX(${isLogin ? '95%' : '0%'})`}}></div>
                     <button 
                         className={`${styles.toggleButton} ${!isLogin ? styles.toggleButtonActive : styles.toggleButtonInactive}`}
                         onClick={() => setIsLogin(false)}
