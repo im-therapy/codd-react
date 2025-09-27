@@ -1,6 +1,15 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { authAPI } from '../services/api';
 
+const timingSafeEqual = (a, b) => {
+  if (a.length !== b.length) return false;
+  let result = 0;
+  for (let i = 0; i < a.length; i++) {
+    result |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  }
+  return result === 0;
+};
+
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -8,6 +17,14 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     const login = async (login, password) => {
+        if (!login || !password) {
+            return { success: false, error: 'Логин и пароль обязательны' };
+        }
+        
+        if (login.length < 3 || password.length < 6) {
+            return { success: false, error: 'Неверные данные' };
+        }
+        
         try {
             const response = await authAPI.login(login, password);
             const { token, user: userData } = response.data;
@@ -21,6 +38,18 @@ export const AuthProvider = ({ children }) => {
     };
 
     const register = async (login, password, role = 'viewer') => {
+        if (!login || !password) {
+            return { success: false, error: 'Логин и пароль обязательны' };
+        }
+        
+        if (login.length < 3) {
+            return { success: false, error: 'Логин должен быть минимум 3 символа' };
+        }
+        
+        if (password.length < 6) {
+            return { success: false, error: 'Пароль должен быть минимум 6 символов' };
+        }
+        
         try {
             const response = await authAPI.register(login, password, role);
             return { success: true, data: response.data };
@@ -38,10 +67,8 @@ export const AuthProvider = ({ children }) => {
         const token = localStorage.getItem('token');
         if (token) {
             try {
-                // Декодируем JWT токен
                 const payload = JSON.parse(atob(token.split('.')[1]));
                 
-                // Проверяем срок действия
                 if (payload.exp * 1000 > Date.now()) {
                     setUser({
                         id: payload.id,
@@ -49,11 +76,9 @@ export const AuthProvider = ({ children }) => {
                         name: payload.name
                     });
                 } else {
-                    // Токен просрочен
                     localStorage.removeItem('token');
                 }
             } catch (error) {
-                // Невалидный токен
                 localStorage.removeItem('token');
             }
         }

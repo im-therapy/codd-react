@@ -94,32 +94,32 @@ const Analytics = () => {
 
   const mockStreetData = {
     month: [
-      { name: 'Пятницкая улица', accidents: 12, fatal: 3 },
-      { name: 'Коварный перекресток', accidents: 8, fatal: 1 },
-      { name: 'Переулок разочарования', accidents: 6, fatal: 2 },
-      { name: 'Проспект Победы', accidents: 4, fatal: 1 },
-      { name: 'Улица Кирова', accidents: 2, fatal: 0 }
+      { name: 'ул. Ленина', accidents: 12, fatal: 3 },
+      { name: 'пр. Гагарина', accidents: 8, fatal: 1 },
+      { name: 'ул. Кашена', accidents: 6, fatal: 2 },
+      { name: 'пр. Победы', accidents: 4, fatal: 1 },
+      { name: 'ул. Кирова', accidents: 2, fatal: 0 }
     ],
     halfYear: [
-      { name: 'Пятницкая улица', accidents: 45, fatal: 18 },
-      { name: 'Коварный перекресток', accidents: 38, fatal: 6 },
-      { name: 'Переулок разочарования', accidents: 28, fatal: 9 },
-      { name: 'Проспект Победы', accidents: 22, fatal: 8 },
-      { name: 'Улица Кирова', accidents: 15, fatal: 3 }
+      { name: 'ул. Ленина', accidents: 45, fatal: 18 },
+      { name: 'пр. Гагарина', accidents: 38, fatal: 6 },
+      { name: 'ул. Кашена', accidents: 28, fatal: 9 },
+      { name: 'пр. Победы', accidents: 22, fatal: 8 },
+      { name: 'ул. Кирова', accidents: 15, fatal: 3 }
     ],
     year: [
-      { name: 'Пятницкая улица', accidents: 85, fatal: 44 },
-      { name: 'Коварный перекресток', accidents: 84, fatal: 14 },
-      { name: 'Переулок разочарования', accidents: 59, fatal: 20 },
-      { name: 'Проспект Победы', accidents: 43, fatal: 19 },
-      { name: 'Улица Кирова', accidents: 21, fatal: 9 }
+      { name: 'ул. Ленина', accidents: 85, fatal: 44 },
+      { name: 'пр. Гагарина', accidents: 84, fatal: 14 },
+      { name: 'ул. Кашена', accidents: 59, fatal: 20 },
+      { name: 'пр. Победы', accidents: 43, fatal: 19 },
+      { name: 'ул. Кирова', accidents: 21, fatal: 9 }
     ],
     fiveYears: [
-      { name: 'Пятницкая улица', accidents: 180, fatal: 25 },
-      { name: 'Коварный перекресток', accidents: 165, fatal: 18 },
-      { name: 'Переулок разочарования', accidents: 142, fatal: 22 },
-      { name: 'Проспект Победы', accidents: 128, fatal: 15 },
-      { name: 'Улица Кирова', accidents: 95, fatal: 12 }
+      { name: 'ул. Ленина', accidents: 180, fatal: 25 },
+      { name: 'пр. Гагарина', accidents: 165, fatal: 18 },
+      { name: 'ул. Кашена', accidents: 142, fatal: 22 },
+      { name: 'пр. Победы', accidents: 128, fatal: 15 },
+      { name: 'ул. Кирова', accidents: 95, fatal: 12 }
     ]
   };
 
@@ -127,7 +127,7 @@ const Analytics = () => {
     loadData();
   }, []);
 
-  // Инициализация анимированных значений при первой загрузке
+
   useEffect(() => {
     if (USE_MOCK_DATA) {
       const currentData = mockData[accidentsPeriod];
@@ -202,7 +202,7 @@ const Analytics = () => {
     return <div className="analytics"><div className="loading">Загрузка...</div></div>;
   }
 
-  // Моковые данные для разработки
+
   const currentAccidentsData = USE_MOCK_DATA ? mockData[accidentsPeriod] : { monthlyData: [], total: 0, withInjuries: 0, fatal: 0 };
   const currentStreetsData = USE_MOCK_DATA ? mockStreetData[streetsPeriod] : [];
   

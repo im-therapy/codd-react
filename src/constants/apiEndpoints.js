@@ -59,8 +59,7 @@ export const API_ENDPOINTS = {
 export const API_DATA_TYPES = {
   USER: {
     login: 'string',
-    password: 'string', 
-    role: 'string', // 'admin' | 'viewer'
+    role: 'string',
   },
   
   NEWS: {
