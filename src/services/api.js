@@ -4,17 +4,13 @@ import { API_ENDPOINTS } from '../constants/apiEndpoints';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  
   if (['post', 'put', 'patch', 'delete'].includes(config.method)) {
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
     if (csrfToken) {
@@ -29,7 +25,6 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('token');
       window.location.href = '/auth';
     }
     return Promise.reject(error);
@@ -42,6 +37,10 @@ export const authAPI = {
 
   login: (login, password) =>
     api.post(API_ENDPOINTS.AUTH.LOGIN, { login, password }),
+
+  logout: () => api.post(API_ENDPOINTS.AUTH.LOGOUT),
+
+  me: () => api.get(API_ENDPOINTS.AUTH.ME),
 
   getUser: (userId) => api.get(API_ENDPOINTS.AUTH.GET_USER(userId)),
 };

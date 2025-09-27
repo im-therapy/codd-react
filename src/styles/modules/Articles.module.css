@@ -185,6 +185,18 @@
   position: relative;
 }
 
+.tabs::after {
+  content: '';
+  position: absolute;
+  bottom: -0.25vh;
+  left: var(--underline-left, 0px);
+  width: var(--underline-width, 0px);
+  height: 0.25vh;
+  background: #FFFFFF;
+  transition: all 0.3s ease;
+  z-index: 3;
+}
+
 .tab {
   display: flex;
   justify-content: center;
@@ -212,16 +224,7 @@
   color: #FFFFFF;
 }
 
-.tab.active::after {
-  content: '';
-  position: absolute;
-  bottom: -0.25vh;
-  left: 0;
-  right: 0;
-  height: 0.25vh;
-  background: #FFFFFF;
-  animation: slideIn 0.3s ease;
-}
+
 
 @keyframes slideIn {
   from {
@@ -544,13 +547,12 @@
 }
 
 .noArticles {
-  position: absolute;
-  top: 571px;
-  left: 50%;
-  transform: translateX(-50%);
+  grid-column: 1 / -1;
+  text-align: center;
   font-size: 18px;
   color: #676C75;
-  text-align: center;
+  padding: 4vh 0;
+  margin-top: 2vh;
 }
 
 .articlesSpacer {

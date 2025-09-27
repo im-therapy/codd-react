@@ -6,6 +6,8 @@ export const API_ENDPOINTS = {
   AUTH: {
     LOGIN: '/users/login',
     REGISTER: '/users/create',
+    LOGOUT: '/users/logout',
+    ME: '/users/me',
     GET_USER: (userId) => `/users/${userId}`,
   },
 

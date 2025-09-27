@@ -24,7 +24,7 @@ export const checkServerHealth = async () => {
         if (!serverAvailable) {
             console.warn('🔴 Сервер недоступен, используем моковые данные');
         } else {
-            console.log('🟢 Сервер доступен');
+
         }
         
         return serverAvailable;

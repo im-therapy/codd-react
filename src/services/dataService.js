@@ -148,16 +148,13 @@ export const loginUser = async (login, password) => {
 
 export const registerUser = async (login, password, role = 'viewer') => {
   if (USE_MOCK_DATA || !(await checkServerHealth())) {
-    console.log('📝 Мок регистрация:', { login, password, role });
     return { success: true, message: 'Пользователь успешно зарегистрирован (мок)' };
   }
   
   try {
-    console.log('📝 Отправка регистрации на сервер:', { login, password, role });
     const response = await authAPI.register(login, password, role);
     return { success: true, data: response.data };
   } catch (error) {
-    console.error('❌ Ошибка регистрации:', error);
     return { success: false, error: error.response?.data?.message || 'Ошибка регистрации' };
   }
 };

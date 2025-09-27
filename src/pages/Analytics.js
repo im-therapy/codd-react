@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { USE_MOCK_DATA } from '../constants/config';
 import { statisticsAPI } from '../services/api';
-import './Analytics.css';
+import styles from '../styles/modules/Analytics.module.css';
 
 const Analytics = () => {
   const [loading, setLoading] = useState(false);
   const [accidentsPeriod, setAccidentsPeriod] = useState('year');
   const [streetsPeriod, setStreetsPeriod] = useState('year');
-  const [animatedTotal, setAnimatedTotal] = useState(798);
-  const [animatedWithInjuries, setAnimatedWithInjuries] = useState(686);
-  const [animatedFatal, setAnimatedFatal] = useState(112);
+  const [animatedTotal, setAnimatedTotal] = useState(0);
+  const [animatedWithInjuries, setAnimatedWithInjuries] = useState(0);
+  const [animatedFatal, setAnimatedFatal] = useState(0);
   const [animatedStreetTotal, setAnimatedStreetTotal] = useState(0);
   const [animatedStreetFatal, setAnimatedStreetFatal] = useState(0);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   const mockData = {
     month: {
@@ -132,11 +133,14 @@ const Analytics = () => {
       const streetTotal = currentStreets.reduce((sum, street) => sum + street.accidents, 0);
       const streetFatal = currentStreets.reduce((sum, street) => sum + street.fatal, 0);
       
-      setAnimatedTotal(currentData.total);
-      setAnimatedWithInjuries(currentData.withInjuries);
-      setAnimatedFatal(currentData.fatal);
-      setAnimatedStreetTotal(streetTotal);
-      setAnimatedStreetFatal(streetFatal);
+      setTimeout(() => {
+        animateNumber(0, currentData.total, setAnimatedTotal, 1200);
+        animateNumber(0, currentData.withInjuries, setAnimatedWithInjuries, 1200);
+        animateNumber(0, currentData.fatal, setAnimatedFatal, 1200);
+        animateNumber(0, streetTotal, setAnimatedStreetTotal, 1200);
+        animateNumber(0, streetFatal, setAnimatedStreetFatal, 1200);
+        setIsInitialLoad(false);
+      }, 500);
     }
   }, []);
 
@@ -185,8 +189,7 @@ const Analytics = () => {
           statisticsAPI.getAccidents({ period }),
           statisticsAPI.getDangerousStreets({ period, limit: 5 })
         ]);
-        console.log('Статистика:', statsResponse.data);
-        console.log('Опасные улицы:', streetsResponse.data);
+
       }
     } catch (error) {
       console.error('Ошибка загрузки данных:', error);
@@ -196,28 +199,23 @@ const Analytics = () => {
   };
 
   if (loading) {
-    return <div className="analytics"><div className="loading">Загрузка...</div></div>;
+    return <div className={styles.analytics}><div className={styles.loading}>Загрузка...</div></div>;
   }
 
 
-  const currentAccidentsData = USE_MOCK_DATA ? mockData[accidentsPeriod] : { monthlyData: [], total: 0, withInjuries: 0, fatal: 0 };
-  const currentStreetsData = USE_MOCK_DATA ? mockStreetData[streetsPeriod] : [];
-  
-  const monthlyData = currentAccidentsData.monthlyData;
-  const streetData = currentStreetsData;
+  const monthlyData = USE_MOCK_DATA ? mockData[accidentsPeriod].monthlyData : [];
+  const streetData = USE_MOCK_DATA ? mockStreetData[streetsPeriod] : [];
   return (
-    <div className="analytics">
-      <div className="analytics-header">
+    <div className={styles.analytics}>
+      <div className={styles.analyticsHeader}>
         <h1>Аналитика</h1>
       </div>
       
-
-      
-      <div className="charts-grid">
-        <div className="chart-card">
-          <div className="chart-header">
+      <div className={styles.chartsGrid}>
+        <div className={styles.chartCard}>
+          <div className={styles.chartHeader}>
             <h3>Статистика ДТП по месяцам</h3>
-            <div className="period-buttons" style={{
+            <div className={styles.periodButtons} style={{
               '--slider-position': 
                 accidentsPeriod === 'month' ? '0px' :
                 accidentsPeriod === 'halfYear' ? 'calc(130%)' :
@@ -225,25 +223,25 @@ const Analytics = () => {
                 'calc(320%)'
             }}>
               <button 
-                className={accidentsPeriod === 'month' ? 'active' : ''}
+                className={accidentsPeriod === 'month' ? styles.active : ''}
                 onClick={() => handleAccidentsPeriodChange('month')}
               >
                 Месяц
               </button>
               <button 
-                className={accidentsPeriod === 'halfYear' ? 'active' : ''}
+                className={accidentsPeriod === 'halfYear' ? styles.active : ''}
                 onClick={() => handleAccidentsPeriodChange('halfYear')}
               >
                 Полгода
               </button>
               <button 
-                className={accidentsPeriod === 'year' ? 'active' : ''}
+                className={accidentsPeriod === 'year' ? styles.active : ''}
                 onClick={() => handleAccidentsPeriodChange('year')}
               >
                 Год
               </button>
               <button 
-                className={accidentsPeriod === 'fiveYears' ? 'active' : ''}
+                className={accidentsPeriod === 'fiveYears' ? styles.active : ''}
                 onClick={() => handleAccidentsPeriodChange('fiveYears')}
               >
                 5лет
@@ -251,22 +249,22 @@ const Analytics = () => {
             </div>
           </div>
           
-          <div className="chart-stats">
-            <div className="total">{animatedTotal}</div>
-            <div className="legend">
-              <div className="legend-item">
-                <div className="dot red"></div>
+          <div className={styles.chartStats}>
+            <div className={styles.total}>{animatedTotal}</div>
+            <div className={styles.legend}>
+              <div className={styles.legendItem}>
+                <div className={`${styles.dot} ${styles.red}`}></div>
                 <span>{animatedWithInjuries} с пострадавшими</span>
               </div>
-              <div className="legend-item">
-                <div className="dot dark-red"></div>
+              <div className={styles.legendItem}>
+                <div className={`${styles.dot} ${styles.darkRed}`}></div>
                 <span>{animatedFatal} летальных</span>
               </div>
             </div>
           </div>
 
-          <div className="bar-chart">
-            <div className="y-labels">
+          <div className={styles.barChart}>
+            <div className={styles.yLabels}>
               <span>1000</span>
               <span>800</span>
               <span>600</span>
@@ -274,16 +272,20 @@ const Analytics = () => {
               <span>200</span>
               <span>0</span>
             </div>
-            <div className="bars">
+            <div className={styles.bars}>
               {monthlyData.map((data, index) => {
                 const maxAccidents = Math.max(...monthlyData.map(d => d.accidents));
-                const accidentsHeight = (data.accidents / maxAccidents) * 150;
-                const fatalHeight = (data.fatal / maxAccidents) * 150;
+                const accidentsHeight = (data.accidents / maxAccidents) * 180;
+                const fatalHeight = (data.fatal / maxAccidents) * 180;
                 return (
-                  <div key={index} className="bar-group">
-                    <div className="bar-stack">
-                      <div className="bar accidents" style={{'--target-height': `${accidentsHeight}px`}}></div>
-                      <div className="bar fatal" style={{'--target-height': `${fatalHeight}px`}}></div>
+                  <div key={index} className={styles.barGroup}>
+                    <div className={styles.barStack}>
+                      <div className={`${styles.bar} ${styles.accidents}`} style={{
+                        '--target-height': isInitialLoad ? '0px' : `${accidentsHeight}px`
+                      }}></div>
+                      <div className={`${styles.bar} ${styles.fatal}`} style={{
+                        '--target-height': isInitialLoad ? '0px' : `${fatalHeight}px`
+                      }}></div>
                     </div>
                     <span>{data.month}</span>
                   </div>
@@ -293,10 +295,10 @@ const Analytics = () => {
           </div>
         </div>
 
-        <div className="chart-card">
-          <div className="chart-header">
+        <div className={styles.chartCard}>
+          <div className={styles.chartHeader}>
             <h3>Опасные улицы</h3>
-            <div className="period-buttons" style={{
+            <div className={styles.periodButtons} style={{
               '--slider-position': 
                 streetsPeriod === 'month' ? '0px' :
                 streetsPeriod === 'halfYear' ? 'calc(130%)' :
@@ -304,25 +306,25 @@ const Analytics = () => {
                 'calc(320%)'
             }}>
               <button 
-                className={streetsPeriod === 'month' ? 'active' : ''}
+                className={streetsPeriod === 'month' ? styles.active : ''}
                 onClick={() => handleStreetsPeriodChange('month')}
               >
                 Месяц
               </button>
               <button 
-                className={streetsPeriod === 'halfYear' ? 'active' : ''}
+                className={streetsPeriod === 'halfYear' ? styles.active : ''}
                 onClick={() => handleStreetsPeriodChange('halfYear')}
               >
                 Полгода
               </button>
               <button 
-                className={streetsPeriod === 'year' ? 'active' : ''}
+                className={streetsPeriod === 'year' ? styles.active : ''}
                 onClick={() => handleStreetsPeriodChange('year')}
               >
                 Год
               </button>
               <button 
-                className={streetsPeriod === 'fiveYears' ? 'active' : ''}
+                className={streetsPeriod === 'fiveYears' ? styles.active : ''}
                 onClick={() => handleStreetsPeriodChange('fiveYears')}
               >
                 5лет
@@ -330,35 +332,39 @@ const Analytics = () => {
             </div>
           </div>
           
-          <div className="chart-stats">
-            <div className="total">{animatedStreetTotal}</div>
-            <div className="legend">
-              <div className="legend-item">
-                <div className="dot red"></div>
+          <div className={styles.chartStats}>
+            <div className={styles.total}>{animatedStreetTotal}</div>
+            <div className={styles.legend}>
+              <div className={styles.legendItem}>
+                <div className={`${styles.dot} ${styles.red}`}></div>
                 <span>{animatedStreetTotal} с пострадавшими</span>
               </div>
-              <div className="legend-item">
-                <div className="dot dark-red"></div>
+              <div className={styles.legendItem}>
+                <div className={`${styles.dot} ${styles.darkRed}`}></div>
                 <span>{animatedStreetFatal} летальных</span>
               </div>
             </div>
           </div>
 
-          <div className="horizontal-chart">
-            <div className="street-names">
+          <div className={styles.horizontalChart}>
+            <div className={styles.streetNames}>
               {streetData.map((street, index) => (
                 <div key={index}>{street.name}</div>
               ))}
             </div>
-            <div className="horizontal-bars">
+            <div className={styles.horizontalBars}>
               {streetData.map((street, index) => {
                 const maxAccidents = Math.max(...streetData.map(s => s.accidents));
                 const accidentsWidth = (street.accidents / maxAccidents) * 100;
                 const fatalWidth = (street.fatal / maxAccidents) * 100;
                 return (
-                  <div key={index} className="h-bar-group">
-                    <div className="h-bar accidents" style={{'--target-width': `${accidentsWidth}%`}}></div>
-                    <div className="h-bar fatal" style={{'--target-width': `${fatalWidth}%`}}></div>
+                  <div key={index} className={styles.hBarGroup}>
+                    <div className={`${styles.hBar} ${styles.accidents}`} style={{
+                      '--target-width': isInitialLoad ? '0%' : `${accidentsWidth}%`
+                    }}></div>
+                    <div className={`${styles.hBar} ${styles.fatal}`} style={{
+                      '--target-width': isInitialLoad ? '0%' : `${fatalWidth}%`
+                    }}></div>
                   </div>
                 );
               })}

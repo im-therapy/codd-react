@@ -1,15 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { authAPI } from '../services/api';
 
-const timingSafeEqual = (a, b) => {
-  if (a.length !== b.length) return false;
-  let result = 0;
-  for (let i = 0; i < a.length; i++) {
-    result |= a.charCodeAt(i) ^ b.charCodeAt(i);
-  }
-  return result === 0;
-};
-
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -27,9 +18,8 @@ export const AuthProvider = ({ children }) => {
         
         try {
             const response = await authAPI.login(login, password);
-            const { token, user: userData } = response.data;
+            const { user: userData } = response.data;
             
-            localStorage.setItem('token', token);
             setUser(userData);
             return { success: true, user: userData };
         } catch (error) {
@@ -58,31 +48,29 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    const logout = () => {
-        localStorage.removeItem('token');
-        setUser(null);
+    const logout = async () => {
+        try {
+            await authAPI.logout();
+        } catch (error) {
+            console.error('Ошибка при выходе:', error);
+        } finally {
+            setUser(null);
+        }
+    };
+
+    const checkAuth = async () => {
+        try {
+            const response = await authAPI.me();
+            setUser(response.data.user);
+        } catch (error) {
+            setUser(null);
+        } finally {
+            setLoading(false);
+        }
     };
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            try {
-                const payload = JSON.parse(atob(token.split('.')[1]));
-                
-                if (payload.exp * 1000 > Date.now()) {
-                    setUser({
-                        id: payload.id,
-                        email: payload.email,
-                        name: payload.name
-                    });
-                } else {
-                    localStorage.removeItem('token');
-                }
-            } catch (error) {
-                localStorage.removeItem('token');
-            }
-        }
-        setLoading(false);
+        checkAuth();
     }, []);
 
     return (

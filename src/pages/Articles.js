@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ReactComponent as EmailIcon } from '../assets/icons/Email.svg';
 import { ReactComponent as RightIcon } from '../assets/icons/right.svg';
 import ArticleCard from '../components/ArticleCard';
@@ -11,6 +11,7 @@ export default function Articles() {
     const { articles, loading, error } = useArticles();
     const [activeTab, setActiveTab] = useState(ARTICLE_TAGS.ALL);
     const [email, setEmail] = useState('');
+    const tabsRef = useRef(null);
 
     const handleSubscribe = async (e) => {
         e.preventDefault();
@@ -24,6 +25,37 @@ export default function Articles() {
             console.error('Ошибка подписки:', error);
         }
     };
+
+    const updateUnderline = () => {
+        if (!tabsRef.current) return;
+        
+        const activeButton = tabsRef.current.querySelector('.active');
+        const underline = tabsRef.current.querySelector('::after');
+        
+        if (activeButton && tabsRef.current) {
+            const tabsRect = tabsRef.current.getBoundingClientRect();
+            const activeRect = activeButton.getBoundingClientRect();
+            const left = activeRect.left - tabsRect.left;
+            const width = activeRect.width;
+            
+            tabsRef.current.style.setProperty('--underline-left', `${left}px`);
+            tabsRef.current.style.setProperty('--underline-width', `${width}px`);
+        }
+    };
+
+    useEffect(() => {
+        setTimeout(() => updateUnderline(), 0);
+    }, [activeTab]);
+
+    useEffect(() => {
+        const handleLoad = () => setTimeout(() => updateUnderline(), 100);
+        if (document.readyState === 'complete') {
+            handleLoad();
+        } else {
+            window.addEventListener('load', handleLoad);
+            return () => window.removeEventListener('load', handleLoad);
+        }
+    }, []);
 
     const filteredArticles = articles.filter(article => {
         if (activeTab === ARTICLE_TAGS.ALL) return true;
@@ -68,27 +100,30 @@ export default function Articles() {
                     </p>
                 </div>
             </section>
-            <div className={styles.tabs}>
+            <div className={styles.tabs} ref={tabsRef} style={{
+                '--underline-left': '0px',
+                '--underline-width': '0px'
+            }}>
                 <button 
-                    className={`${styles.tab} ${activeTab === ARTICLE_TAGS.ALL ? 'active' : ''}`}
+                    className={`${styles.tab} ${activeTab === ARTICLE_TAGS.ALL ? styles.active + ' active' : ''}`}
                     onClick={() => setActiveTab(ARTICLE_TAGS.ALL)}
                 >
                     Все статьи
                 </button>
                 <button 
-                    className={`${styles.tab} ${activeTab === ARTICLE_TAGS.EDUCATIONAL ? 'active' : ''}`}
+                    className={`${styles.tab} ${activeTab === ARTICLE_TAGS.EDUCATIONAL ? styles.active + ' active' : ''}`}
                     onClick={() => setActiveTab(ARTICLE_TAGS.EDUCATIONAL)}
                 >
                     Образовательные
                 </button>
                 <button 
-                    className={`${styles.tab} ${activeTab === ARTICLE_TAGS.NEW_LAWS ? 'active' : ''}`}
+                    className={`${styles.tab} ${activeTab === ARTICLE_TAGS.NEW_LAWS ? styles.active + ' active' : ''}`}
                     onClick={() => setActiveTab(ARTICLE_TAGS.NEW_LAWS)}
                 >
                     Новые законы
                 </button>
                 <button 
-                    className={`${styles.tab} ${activeTab === ARTICLE_TAGS.NEWS ? 'active' : ''}`}
+                    className={`${styles.tab} ${activeTab === ARTICLE_TAGS.NEWS ? styles.active + ' active' : ''}`}
                     onClick={() => setActiveTab(ARTICLE_TAGS.NEWS)}
                 >
                     Новости
