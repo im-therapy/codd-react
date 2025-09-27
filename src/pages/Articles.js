@@ -5,7 +5,7 @@ import ArticleCard from '../components/ArticleCard';
 import { subscribeNewsletter } from '../services/dataService';
 import { useArticles } from '../hooks/useArticles';
 import { ARTICLE_TAGS } from '../constants/routes';
-import '../styles/modules/Articles.css';
+import styles from '../styles/modules/Articles.module.css';
 
 export default function Articles() {
     const { articles, loading, error } = useArticles();
@@ -30,83 +30,83 @@ export default function Articles() {
         return article.tags.includes(activeTab);
     });
 
-    if (loading) return <div className="articles-loading">Загрузка...</div>;
-    if (error) return <div className="articles-error">{error}</div>;
+    if (loading) return <div className={styles.articlesLoading}>Загрузка...</div>;
+    if (error) return <div className={styles.articlesError}>{error}</div>;
 
     return (
-        <div className="articles-container">
-            <section className="hero">
-                <div className="hero-content">
-                    <h1 className="hero-title">Дорожный блог Смоленска</h1>
+        <div className={styles.articlesContainer}>
+            <section className={styles.hero}>
+                <div className={styles.heroContent}>
+                    <h1 className={styles.heroTitle}>Дорожный блог Смоленска</h1>
 
-                    <form className="newsletter-form" onSubmit={handleSubscribe}>
-                        <div className="newsletter-input">
-                            <EmailIcon className="email-icon" />
+                    <form className={styles.newsletterForm} onSubmit={handleSubscribe}>
+                        <div className={styles.newsletterInput}>
+                            <EmailIcon className={styles.emailIcon} />
                             <input
                                 type="email"
                                 placeholder="Введите свой email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="email-input"
+                                className={styles.emailInput}
                                 required
                             />
-                            <button type="submit" className="subscribe-btn">
+                            <button type="submit" className={styles.subscribeBtn}>
                                 Подписаться
-                                <RightIcon className="right-icon" />
+                                <RightIcon className={styles.rightIcon} />
                             </button>
                         </div>
-                        <p className="newsletter-disclaimer">
+                        <p className={styles.newsletterDisclaimer}>
                             Подписываясь на рассылку вы принимаете <a href="/privacy" style={{color: '#FFFFFF', textDecoration: 'none'}}>условия обработки персональных данных</a>
                         </p>
                     </form>
                 </div>
                 
-                <div className="hero-description">
+                <div className={styles.heroDescription}>
                     <p>
                         Образовательные статьи, новые законы, новости Смоленской области в сфере ЦОДД и не только. 
                         Подпишитесь на рассылку чтобы следить за новыми статьями
                     </p>
                 </div>
             </section>
-            <div className="tabs">
+            <div className={styles.tabs}>
                 <button 
-                    className={`tab ${activeTab === ARTICLE_TAGS.ALL ? 'active' : ''}`}
+                    className={`${styles.tab} ${activeTab === ARTICLE_TAGS.ALL ? 'active' : ''}`}
                     onClick={() => setActiveTab(ARTICLE_TAGS.ALL)}
                 >
                     Все статьи
                 </button>
                 <button 
-                    className={`tab ${activeTab === ARTICLE_TAGS.EDUCATIONAL ? 'active' : ''}`}
+                    className={`${styles.tab} ${activeTab === ARTICLE_TAGS.EDUCATIONAL ? 'active' : ''}`}
                     onClick={() => setActiveTab(ARTICLE_TAGS.EDUCATIONAL)}
                 >
                     Образовательные
                 </button>
                 <button 
-                    className={`tab ${activeTab === ARTICLE_TAGS.NEW_LAWS ? 'active' : ''}`}
+                    className={`${styles.tab} ${activeTab === ARTICLE_TAGS.NEW_LAWS ? 'active' : ''}`}
                     onClick={() => setActiveTab(ARTICLE_TAGS.NEW_LAWS)}
                 >
                     Новые законы
                 </button>
                 <button 
-                    className={`tab ${activeTab === ARTICLE_TAGS.NEWS ? 'active' : ''}`}
+                    className={`${styles.tab} ${activeTab === ARTICLE_TAGS.NEWS ? 'active' : ''}`}
                     onClick={() => setActiveTab(ARTICLE_TAGS.NEWS)}
                 >
                     Новости
                 </button>
             </div>
 
-            <div className="articles-grid">
+            <div className={styles.articlesGrid}>
                 {filteredArticles.map(article => (
                     <ArticleCard key={article.id} article={article} />
                 ))}
             </div>
             
             {filteredArticles.length === 0 && (
-                <div className="no-articles">
+                <div className={styles.noArticles}>
                     Статьи не найдены
                 </div>
             )}
-            <div className="articles-spacer"></div>
+            <div className={styles.articlesSpacer}></div>
         </div>
     );
 }

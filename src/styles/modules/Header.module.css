@@ -9,7 +9,7 @@
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
     border: 2px solid #1C1D1F;
-    border-radius: 40px;
+    border-radius: 20px;
     padding: 0 24px;
     display: flex;
     align-items: center;
@@ -49,6 +49,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    transition: color 0.3s ease;
 }
 
 .navLinkActive {
@@ -69,11 +70,13 @@
     background: none;
     border: none;
     cursor: pointer;
+    transition: color 0.3s ease;
 }
 
 .icon {
     width: 20px;
     height: 20px;
+    transition: color 0.3s ease;
 }
 
 .iconActive {

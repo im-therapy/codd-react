@@ -1,4 +1,4 @@
-.accident-overlay {
+.accidentOverlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -8,7 +8,7 @@
   z-index: 9998;
 }
 
-.accident-panel {
+.accidentPanel {
   position: fixed;
   top: 100px;
   right: 16px;
@@ -28,7 +28,7 @@
   border-radius: 1.39vw;
 }
 
-.accident-content {
+.accidentContent {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -38,7 +38,7 @@
   height: 61.51vh;
 }
 
-.accident-header {
+.accidentHeader {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -48,13 +48,13 @@
   height: 5.93vh;
 }
 
-.accident-icon {
+.accidentIcon {
   position: relative;
   width: 3.89vw;
   height: 5.93vh;
 }
 
-.icon-bg {
+.iconBg {
   position: absolute;
   width: 2.22vw;
   height: 5.93vh;
@@ -65,7 +65,7 @@
   border-radius: 6.94vw 0 0 6.94vw;
 }
 
-.icon-circle {
+.iconCircle {
   position: absolute;
   display: flex;
   align-items: center;
@@ -79,7 +79,7 @@
   border-radius: 6.94vw;
 }
 
-.accident-header h3 {
+.accidentHeader h3 {
   font-family: 'Manrope', sans-serif;
   font-weight: 600;
   font-size: 2.22vw;
@@ -89,7 +89,7 @@
   flex-grow: 1;
 }
 
-.accident-details {
+.accidentDetails {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -98,20 +98,20 @@
   width: 31.39vw;
 }
 
-.photo-section {
+.photoSection {
   width: 31.39vw;
   height: 31.39vh;
   border-radius: 2.22vw;
   overflow: hidden;
 }
 
-.accident-photo {
+.accidentPhoto {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.photo-placeholder {
+.photoPlaceholder {
   width: 100%;
   height: 100%;
   background: rgba(31, 33, 36, 0.5);
@@ -124,21 +124,21 @@
   gap: 0.83vw;
 }
 
-.placeholder-icon {
+.placeholderIcon {
   width: 3.33vw;
   height: 3.33vw;
   opacity: 0.5;
   color: #676C75;
 }
 
-.photo-placeholder span {
+.photoPlaceholder span {
   font-family: 'Manrope', sans-serif;
   font-weight: 500;
   font-size: 1.11vw;
   color: #676C75;
 }
 
-.accident-details h4 {
+.accidentDetails h4 {
   font-family: 'Manrope', sans-serif;
   font-weight: 600;
   font-size: 1.81vw;
@@ -148,7 +148,7 @@
   width: 31.39vw;
 }
 
-.info-grid {
+.infoGrid {
   box-sizing: border-box;
   display: grid;
   grid-template-columns: 1fr 9.03vw 22.36vw;
@@ -158,7 +158,7 @@
   overflow: hidden;
 }
 
-.info-row {
+.infoRow {
   display: flex;
   align-items: center;
   padding: 0.97vw;
@@ -167,20 +167,20 @@
   box-sizing: border-box;
 }
 
-.address-row {
+.addressRow {
   grid-column: 1 / -1;
   border-bottom: 2px solid #1F2124;
 }
 
-.date-row {
+.dateRow {
   border-right: 2px solid #1F2124;
 }
 
-.time-row {
+.timeRow {
   /* no additional styles needed */
 }
 
-.info-row span {
+.infoRow span {
   font-family: 'Manrope', sans-serif;
   font-weight: 500;
   font-size: 0.97vw;
@@ -189,7 +189,7 @@
   flex-grow: 1;
 }
 
-.close-button {
+.closeButton {
   display: flex;
   align-items: center;
   padding: 0.83vw 1.11vw;
