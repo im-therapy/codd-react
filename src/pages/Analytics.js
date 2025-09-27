@@ -125,10 +125,7 @@ const Analytics = () => {
 
   useEffect(() => {
     loadData();
-  }, []);
-
-
-  useEffect(() => {
+    
     if (USE_MOCK_DATA) {
       const currentData = mockData[accidentsPeriod];
       const currentStreets = mockStreetData[streetsPeriod];
@@ -208,11 +205,6 @@ const Analytics = () => {
   
   const monthlyData = currentAccidentsData.monthlyData;
   const streetData = currentStreetsData;
-  const totalAccidents = currentAccidentsData.total;
-  const totalWithInjuries = currentAccidentsData.withInjuries;
-  const totalFatal = currentAccidentsData.fatal;
-  const streetTotal = streetData.reduce((sum, street) => sum + street.accidents, 0);
-  const streetFatalTotal = streetData.reduce((sum, street) => sum + street.fatal, 0);
   return (
     <div className="analytics">
       <div className="analytics-header">

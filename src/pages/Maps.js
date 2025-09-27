@@ -23,6 +23,10 @@ export default function Maps() {
     const [accidentsCount, setAccidentsCount] = useState(0);
     const [isSettingsVisible, setIsSettingsVisible] = useState(false);
     const [selectedMarker, setSelectedMarker] = useState(null);
+    const [showAccidents, setShowAccidents] = useState(true);
+    const [showTrafficLights, setShowTrafficLights] = useState(true);
+    const [tempShowAccidents, setTempShowAccidents] = useState(true);
+    const [tempShowTrafficLights, setTempShowTrafficLights] = useState(true);
 
     useEffect(() => {
         const loadData = async () => {
@@ -64,7 +68,11 @@ export default function Maps() {
                 maxBounds={[30.8, 53.2, 35.5, 55.8]}
                 attributionControl={false}
             >
-                {markers.map(marker => (
+                {markers.filter(marker => {
+                    if (marker.type === 'accident' && !showAccidents) return false;
+                    if (marker.type === 'traffic_light' && !showTrafficLights) return false;
+                    return true;
+                }).map(marker => (
                     <Marker
                         key={marker.id}
                         longitude={marker.longitude}
@@ -97,7 +105,19 @@ export default function Maps() {
                     аварий
                 </span>
             </div>
-            <SettingsPanel isOpen={isSettingsVisible} onClose={() => setIsSettingsVisible(false)} />
+            <SettingsPanel 
+                isOpen={isSettingsVisible} 
+                onClose={() => setIsSettingsVisible(false)}
+                tempShowAccidents={tempShowAccidents}
+                setTempShowAccidents={setTempShowAccidents}
+                tempShowTrafficLights={tempShowTrafficLights}
+                setTempShowTrafficLights={setTempShowTrafficLights}
+                onApply={() => {
+                    setShowAccidents(tempShowAccidents);
+                    setShowTrafficLights(tempShowTrafficLights);
+                    setIsSettingsVisible(false);
+                }}
+            />
             {accidentData && (
                 <AccidentPanel
                     accident={accidentData}

@@ -5,7 +5,7 @@ import { ReactComponent as ClockIcon } from '../assets/icons/clock.svg';
 import { ReactComponent as CalendarIcon } from '../assets/icons/calendar.svg';
 import { ReactComponent as CheckIcon } from '../assets/icons/check.svg';
 
-export default function SettingsPanel({ isOpen, onClose }) {
+export default function SettingsPanel({ isOpen, onClose, tempShowAccidents, setTempShowAccidents, tempShowTrafficLights, setTempShowTrafficLights, onApply }) {
     const handleBackdropClick = (e) => {
         if (e.target === e.currentTarget) {
             onClose?.();
@@ -29,18 +29,26 @@ export default function SettingsPanel({ isOpen, onClose }) {
                                     <div className={styles.objectType}>
                                         Аварии
                                         <label className={styles.switch}>
-                                            <input type="checkbox" />
+                                            <input 
+                                                type="checkbox" 
+                                                checked={tempShowAccidents}
+                                                onChange={(e) => setTempShowAccidents(e.target.checked)}
+                                            />
                                             <span className={styles.slider}></span>
                                         </label>
                                     </div>
                                     <div className={styles.objectType}>
                                         Светофоры
                                         <label className={styles.switch}>
-                                            <input type="checkbox" />
+                                            <input 
+                                                type="checkbox" 
+                                                checked={tempShowTrafficLights}
+                                                onChange={(e) => setTempShowTrafficLights(e.target.checked)}
+                                            />
                                             <span className={styles.slider}></span>
                                         </label>
                                     </div>
-                                    <div className={styles.objectType}>
+                                    <div className={styles.objectType} style={{opacity: 0}}>
                                         Эвакуации
                                         <label className={styles.switch}>
                                             <input type="checkbox" />
@@ -65,7 +73,7 @@ export default function SettingsPanel({ isOpen, onClose }) {
                                 </div>
                             </div>
                         </section>
-                        <button className={styles.acceptButton}>
+                        <button className={styles.acceptButton} onClick={onApply}>
                             <CheckIcon />
                             Применить
                         </button>

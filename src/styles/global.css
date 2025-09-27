@@ -1,8 +1,7 @@
-@import './base.css' layer base;
 @import './colour.css' layer colour;
 @import './typography.css' layer typography;
 
-@layer typography, colour, base;
+@layer typography, colour;
 /*
     Слой colour - для цветов, окрашивания чего-либо;
     Слой typography - для всего, что связано с типографикой на сайте;
