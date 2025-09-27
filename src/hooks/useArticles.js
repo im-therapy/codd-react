@@ -20,6 +20,16 @@ export const useArticles = () => {
         };
         
         loadArticles();
+        
+        const handleArticlesUpdate = () => {
+            loadArticles();
+        };
+        
+        window.addEventListener('articlesUpdated', handleArticlesUpdate);
+        
+        return () => {
+            window.removeEventListener('articlesUpdated', handleArticlesUpdate);
+        };
     }, []);
 
     return { articles, loading, error };

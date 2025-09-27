@@ -50,6 +50,15 @@ export default function Header() {
                     <NewsIcon className={`${styles.icon} ${location.pathname === '/articles' ? styles.iconActive : styles.iconInactive}`} />
                     Статьи
                 </Link>
+                {true && (
+                    <Link
+                        to="/create-article"
+                        className={`${styles.navLink} ${location.pathname === '/create-article' ? styles.navLinkActive : styles.navLinkInactive}`}
+                    >
+                        <NewsIcon className={`${styles.icon} ${location.pathname === '/create-article' ? styles.iconActive : styles.iconInactive}`} />
+                        Создать запись
+                    </Link>
+                )}
                 <Link
                     to="/maps"
                     className={`${styles.navLink} ${location.pathname === '/maps' ? styles.navLinkActive : styles.navLinkInactive}`}
@@ -67,23 +76,13 @@ export default function Header() {
 
             </nav>
 
-            {isAuthenticated ? (
-                <Link
-                    to="/profile"
-                    className={`${styles.authLink} ${styles.navLinkActive}`}
-                >
-                    <AuthIcon className={`${styles.icon} ${styles.iconActive}`} />
-                    {user?.name || 'Пользователь'}
-                </Link>
-            ) : (
-                <Link
-                    to="/auth"
-                    className={`${styles.authLink} ${location.pathname === '/auth' ? styles.navLinkActive : styles.navLinkInactive}`}
-                >
-                    <AuthIcon className={`${styles.icon} ${location.pathname === '/auth' ? styles.iconActive : styles.iconInactive}`} />
-                    Авторизация
-                </Link>
-            )}
+            <Link
+                to="/profile"
+                className={`${styles.authLink} ${styles.navLinkActive}`}
+            >
+                <AuthIcon className={`${styles.icon} ${styles.iconActive} ${styles.iconAdmin}`} />
+                админ
+            </Link>
         </header>
     );
 }
