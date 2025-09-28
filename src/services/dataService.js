@@ -131,11 +131,15 @@ export const getMarkers = getTrafficLights;
 // Функции авторизации (для совместимости)
 export const loginUser = async (login, password) => {
   if (USE_MOCK_DATA || !(await checkServerHealth())) {
-    return {
-      success: true,
-      token: 'mock-jwt-token',
-      user: { id: 1, login, role: 'viewer', name: 'Пользователь' }
-    };
+    // Мок для демонстрации - в продакшене убрать
+    if (login && password) {
+      return {
+        success: true,
+        token: 'demo-jwt-token',
+        user: { id: 1, login, role: 'admin', name: login }
+      };
+    }
+    return { success: false, error: 'Неверные данные' };
   }
   
   try {

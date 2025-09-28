@@ -50,7 +50,7 @@ export default function Header() {
                     <NewsIcon className={`${styles.icon} ${location.pathname === '/articles' ? styles.iconActive : styles.iconInactive}`} />
                     Статьи
                 </Link>
-                {true && (
+                {isAuthenticated && (
                     <Link
                         to="/create-article"
                         className={`${styles.navLink} ${location.pathname === '/create-article' ? styles.navLinkActive : styles.navLinkInactive}`}
@@ -76,13 +76,23 @@ export default function Header() {
 
             </nav>
 
-            <Link
-                to="/profile"
-                className={`${styles.authLink} ${styles.navLinkActive}`}
-            >
-                <AuthIcon className={`${styles.icon} ${styles.iconActive} ${styles.iconAdmin}`} />
-                админ
-            </Link>
+            {isAuthenticated ? (
+                <button
+                    onClick={handleAuthClick}
+                    className={`${styles.authLink} ${styles.navLinkActive}`}
+                >
+                    <AuthIcon className={`${styles.icon} ${styles.iconActive}`} />
+                    {user?.name || 'Пользователь'}
+                </button>
+            ) : (
+                <Link
+                    to="/auth"
+                    className={`${styles.authLink} ${styles.navLinkInactive}`}
+                >
+                    <AuthIcon className={`${styles.icon} ${styles.iconInactive}`} />
+                    Войти
+                </Link>
+            )}
         </header>
     );
 }
